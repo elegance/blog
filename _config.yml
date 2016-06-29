@@ -71,3 +71,6 @@ deploy:
   type: git
   repo: git@github.com:elegance/elegance.github.io.git
   #repo: git@github.com:elegance/blog.git
+
+# duoshuo
+duoshuo_shortname: elegance
