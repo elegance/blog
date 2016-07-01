@@ -1,12 +1,13 @@
 ---
 title: javascript之apply与call方法
 date: 2016-06-29 16:35:54
-tags:
-- javascript
-
 categories:
-- 技术
-- 前端
+- javascript语言
+
+tags:
+- javascript函数
+- javascript基础
+
 ---
 
 #### apply
@@ -21,7 +22,7 @@ categories:
 * argArray：可选，传递给函数的**参数数组**。
 
 例：
-```javascript
+``` javascript
 function callMe(arg1, arg2) {
     var s = '';
 
@@ -63,7 +64,7 @@ console.log(callMe.apply('otherObj', [4, 5]));
 * arg1, arg2, , argN: 可选。将被传递到该方法的参数列表。
 
 例：
-```javascript
+``` javascript
 function callMe(arg1, arg2) {
     var s = '';
 

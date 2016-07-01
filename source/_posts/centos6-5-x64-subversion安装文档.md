@@ -1,7 +1,12 @@
 ---
 title: centos6.5-x64.subversion安装文档
 date: 2016-06-29 16:23:47
+categories:
+- Linux
+
 tags:
+- Centos软件安装
+
 ---
 
 ### 一、准备安装包
