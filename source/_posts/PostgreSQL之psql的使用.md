@@ -35,3 +35,9 @@ postgres-# \c db_name
 db_name-# \d
 db_name-# \d table_name
 ```
+
+为用户设置一个密码
+```
+postgres-# \password postgres
+
+```
