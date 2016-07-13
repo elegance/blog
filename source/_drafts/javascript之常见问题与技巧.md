@@ -7,6 +7,26 @@ tags:
 - 技巧
 ---
 
+### 技巧：replace替代循环
+比如你要对页面上的div1,div2,div3 等进行同样的操作，不需要split成数组、考虑兼容的forEach
+```javascript
+"div1 div2 div3".replace(/[^ ]+/g,function(a){
+    console.log(a);
+    return a;
+});
+```
+
+### 理解：变量提升
+```javascript
+//来自 Nettuts+ 的一段代码，生动的阐述了 JavaScript 中变量声明提升规则
+var myvar = 'myvalue';
+
+(function() {
+    alert(myval); //undefined
+    var myval = 'local value';
+})();
+```
+
 ### 函数参数默认值
 定义一个函数，经常会需要给参数默认值的情况，常会看到以下这种方式：
 ```
