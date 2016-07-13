@@ -74,3 +74,8 @@ deploy:
 
 # duoshuo
 duoshuo_shortname: elegance
+
+# Analytics
+cnzz_tonji:
+    enable: true
+    siteid: 1259291275
