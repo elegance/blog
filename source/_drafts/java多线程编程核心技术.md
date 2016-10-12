@@ -38,7 +38,7 @@ public static void main(String[] args) {
 
 #### 1.2.3 实例变量与线程安全
 线程类：
-```
+```java
 public class MyThread extends Thread {
 
     private int count = 5; //实例变量(非static)
@@ -59,7 +59,7 @@ public class MyThread extends Thread {
 }
 ```
 运行方式一，不共享数据，运行类Run:
-```
+```java
 public class Run {
     public static void main(String[] args) {
         MyThread a = new MyThread("A");
@@ -74,7 +74,7 @@ public class Run {
 这里共创建了3个线程，每个线程都有自己的count变量，不存在访问同一个实例变量的情况。
 
 运行方式二，共享数据，运行了ShareRun:
-```
+```java
 public class ShareRun {
     
     public static void main(String[] args) {
@@ -106,7 +106,7 @@ jvm的i--分3个步骤：
 
 #### 1.2.4 注意count--与System.out.println()异常
 将上面代码里面`count--` 放置到`System.out.println()`中，如下：
-```
+```java
 System.out.println("由 " + Thread.currentThread().getName() + " 计算， count=" + (count--));
 ```
 我们注意下在jdk的源码中`System.out.println()`这个方法内部是有`synchronized`的，说明这个方法是线程安全。
@@ -115,7 +115,7 @@ System.out.println("由 " + Thread.currentThread().getName() + " 计算， count
 
 ### 1.3 currentThread()方法
 `currentThread()`方法可以返回代的段正被哪个线程所执行，可以在线程类的run方法国打印执行线程的名称，然后在外部分别使用线程的`start`和`run`方法执行对比查看。
-```
+```java
 System.out.println(Thread.currentThread().getName());
 ```
 
@@ -140,7 +140,7 @@ System.out.println(Thread.currentThread().getName());
 #### 1.7.1 停止不了的线程
 下面的例子演示了`interrupt`停止不了线程的现象：
 线程类：
-```
+```java
 public class MyThread extends Thread {
     
     @Override
@@ -152,7 +152,7 @@ public class MyThread extends Thread {
 }
 ```
 运行类：
-```
+```java
 public class Run {
     public static void main(String[] args) {
         try {
@@ -175,7 +175,7 @@ public class Run {
 
 #### 1.7.3 能停止的线程——异常法
 线程类：
-```
+```java
 public class MyThread extends Thread {
 
     @Override
@@ -192,7 +192,7 @@ public class MyThread extends Thread {
 }
 ```
 上面的线程其实未真正停止，下面在接着改进：
-```
+```java
 public class MyThread extends Thread {
 
     @Override
