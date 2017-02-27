@@ -6,6 +6,7 @@ tags:
 前端：
 
         基础：上下文、作用域、自由变量、原型、闭包、this
+        高阶函数、柯里化、函数节流（多与用户操作、事件如mouseenter、mouseleave、搜索等应用相关） -- ![reference](http://blog.codingplayboy.com/2016/01/18/js_func/)
         callback/Promise/generator+co/async await 等异步编程的特点，协同处理
         jquery、jquery 插件easyui(后台居多) 、lodash、knockout、rxjs
         模块化 require/seajs/  AMD /CMD  ES6 import
@@ -76,8 +77,12 @@ tags:
 
 
     优化方向：
-        应用架构优化
+        瓶颈 =>
+            带宽、数据结构、压缩
 
-        CDN
+            应用架构优化
 
-        数据库优化
+            CDN
+
+            数据库优化
+    
