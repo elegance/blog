@@ -54,15 +54,25 @@ tags:
 
     多了解开阔思路，以便更好的描述问题和获取思路
     redis:
+        特点：K/V存储，内存 快速、磁盘 数据保障
+        应用：缓存、广播
 
     postgres:
+        特点：功能函数丰富 类ORACLE
+        应用：重数据端应用
 
     oracle:
-
+        特点：单机承载量大、函数丰富，license贵
     mysql:
+        特点：开源、应用广泛、场景开源方案多
 
     nginx:
         反向代理（同源问题）、压缩、https、负载均衡、多应用配置
+
+    docker:
+
+    vm:
+
 
     vbs：
         解决windows 开箱即用，无需环境 ，如借鉴 `tail`、`tee`来， linux shell 更简单实现
