@@ -8,9 +8,18 @@ categories:
 date: 2017-02-27 16:29:42
 ---
 
+#### 2017年3月
+```
+addtional   额外的；附加的
+spread      伸开；展开
+combine     使结合；兼有
+craft       手艺；诡计
+behaviour   行为；举止
+```
 
 #### 2017年2月
 ```
+stage       舞台；阶段
 pick        挑选；选中
 omit        省略；删掉
 severity    严重性
