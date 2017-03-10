@@ -24,6 +24,6 @@ java堆、栈、堆栈的区别？
 ### 基础类型：boolean、char、byte、short、int、long、float、double
 
 ### 为什么要有Boolean、Char等对基础类型的包装类型呢？
-比方说
+[Java基本类型和包装类型解析](http://www.cnblogs.com/xltcjylove/p/3584386.html)
 
 基础类型与引用类型的存储是不一样的
