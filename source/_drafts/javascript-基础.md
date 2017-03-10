@@ -4,6 +4,7 @@ tags:
 ---
 ### 一切皆对象
 一切（引用类型）皆对象 （undefined、number、string、boolean属于基础类型，即值类型，引用类型有比如：`Function`、`Array`、`Object`）
+》》 string 这个特殊的家伙：String('str') === 'str' === new String('str') ? 
 
 对象即是属性（属性是有名称和值的，即键值对）的集合
 
