@@ -10,6 +10,7 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+mutation    变异；变化
 addtional   额外的；附加的
 spread      伸开；展开
 combine     使结合；兼有
@@ -134,6 +135,8 @@ demote      降级
 
 #### 其它
 ```
+CISC (Complex Instruction Set Computing)  复杂指令集；(如x86指令集)
+RISC (Reduce Instruction Set Computing)   精简指令集；
 in other words      换句话说
 no longer           不再
 such as             例如
