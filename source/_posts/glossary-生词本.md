@@ -10,6 +10,8 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+volatile    易变的；不稳定的
+reentrant   再进去
 mutation    变异；变化
 addtional   额外的；附加的
 spread      伸开；展开
