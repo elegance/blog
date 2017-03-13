@@ -10,6 +10,8 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+mutex       互斥
+acquire     学到；获得
 stamp       邮票；戳
 volatile    易变的；不稳定的
 reentrant   再进去
