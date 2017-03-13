@@ -19,7 +19,8 @@ tags:
 3. 有序性(Ordering)
 
 ### 悲观锁
-锁解决原子性问题，1.5之前synchronized,悲观锁
+锁解决原子性问题，1.5之前synchronized(内部锁),强制实行互斥，悲观锁
+ 重入锁  ReentrantLock (互斥锁/公平锁) [详解Java多线程编程中互斥锁ReentrantLock类的用法](http://www.jb51.net/article/88076.htm)
 
 线程==>锁（共享资源）
 
