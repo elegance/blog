@@ -7,6 +7,14 @@ tags:
 
 <hr>
 
+### 2017年3月13日13:56:26
+1. [乐观锁的一种实现方式——CAS](http://www.tuicool.com/articles/yiyy6bI)
+2. [深入理解Java虚拟机笔记---原子性、可见性、有序性](http://www.tuicool.com/articles/ru6vUvn)
+3. [Java 理论与实践: 流行的原子](https://www.ibm.com/developerworks/cn/java/j-jtp11234/index.html)
+Q1: 乐观锁的CAS Atomic类的应用
+Q2: jdk 5.0 由锁方案改为 原子变量实现 和 需要时进行锁定
+Q3: 原子性、可见性、有序性的理解
+
 ### 2017年3月10日16:31:43
 1. [java堆、栈、堆栈的区别](http://www.cnblogs.com/iliuyuet/p/5603618.html)  
 2. [java中数据的5种存储位置(堆与栈)-生命周期](http://blog.csdn.net/ghost_programmer/article/details/40891735)
