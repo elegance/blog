@@ -10,6 +10,8 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+segment     环节；部分
+pessimistic 悲观的；厌世的
 mutex       互斥
 acquire     学到；获得
 stamp       邮票；戳

@@ -7,6 +7,9 @@ tags:
 
 <hr>
 
+### 2017年3月14日09:27:57（构师-类图-设计）
+1. [ 架构师之UML类别图，顺序图，用例图，活动图](http://blog.csdn.net/wqewq19/article/details/52931890)
+
 ### 2017年3月13日13:56:26
 1. [乐观锁的一种实现方式——CAS](http://www.tuicool.com/articles/yiyy6bI)
 2. [深入理解Java虚拟机笔记---原子性、可见性、有序性](http://www.tuicool.com/articles/ru6vUvn)
