@@ -10,6 +10,11 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+assembly    装配；集会
+interrupt   打断；阻止
+instead     代替；反而
+inherently  本质上；固有地
+illegal     非法的；违反规则的
 segment     环节；部分
 pessimistic 悲观的；厌世的
 mutex       互斥
@@ -18,7 +23,7 @@ stamp       邮票；戳
 volatile    易变的；不稳定的
 reentrant   再进去
 mutation    变异；变化
-addtional   额外的；附加的
+additional   额外的；附加的
 spread      伸开；展开
 combine     使结合；兼有
 craft       手艺；诡计
