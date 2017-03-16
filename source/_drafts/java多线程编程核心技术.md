@@ -276,3 +276,8 @@ Skills:
 
 #### 2.1.2 实例变量非线程安全
 多个线程访问一个实例中变量发生线程安全问题, 测试类: [ThreadSafetyProblem.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ThreadSafetyProblem.java)
+
+#### 2.1.3 多个对象多个锁
+**关键字`synchronized`取的锁都是对象锁，而不是把一段代码或方法当作锁**
+
+两个线程访问同一个类的的不同实例的相同同步方法，因为创建了不同的实例，系统将根据实例个数产生锁。测试类: [TwoObjectTwoLock.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/TwoObjectTwoLock.java)
