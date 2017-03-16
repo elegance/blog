@@ -298,3 +298,8 @@ Skills:
 当一个线程执行代码出现异常时，其所持有的锁会自动释放。
 
 测试类：[ExceptionAutoReleaseLock.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ExceptionAutoReleaseLock.java)
+
+#### 2.1.8 同步不具有继承性
+子类重写父类的`synchronized`方法，如果该方法不添加`synchronized`标识，此方法将不再具有同步的特性。
+
+测试类：[SyncNotExtends.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SyncNotExtends.java)
