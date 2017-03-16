@@ -303,3 +303,56 @@ Skills:
 子类重写父类的`synchronized`方法，如果该方法不添加`synchronized`标识，此方法将不再具有同步的特性。
 
 测试类：[SyncNotExtends.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SyncNotExtends.java)
+
+### 2.2 synchronized 同步语句块
+多个线程访问同一个对象中的`synchronized(this)`同步代码块时，一段时间内只能有一个线程被执行，其他线程需要等待当前线程完成这个代码块的执行。我们来对比下，同步方法与同步块
+
+同步方法，测试类：[SyncMethod.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SyncMethod.java)
+
+我们分析可以发现`doLongTimeTask`方法里面，只是对`getData1`、`getData2`赋值做了对**共享资源**的操作，之前部分的耗时操作不依赖**共享资源**，这部分代码完全可以`非同步`率先执行，所以修改方法，可以让方法内部达到`一般异步，一半同步`的效果。
+
+同步块，测试类：[SyncBlcok.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SyncBlock.java)
+
+完成同样的效果，后者花费的时间缩短了50%；
+
+#### 2.2.1 synchronized 方法的弊端
+#### 2.2.2 synchronized 同步代码块的使用
+#### 2.2.3 用同步方法解决同步方法的弊端
+#### 2.2.4 一半异步，一半同步
+其实上面提到的几点，上面的例子都已经体现了
+
+同步方法弊端：也就是方法内部的代码，眉毛胡子一把抓，不区分“必须同步”与“可以异步”的代码将其“同步”的方式来执行，这样方法持锁时间更长，耗时更久。
+
+同步块代码的使用：分析代码，区分`必须同步`与`可以非同步`，将同步代码加上`synchronized`。
+
+#### 2.2.5 synchronized 代码块的同步性
+使用`synchronized(this)`代码块时，当一个线程访问`object`的一个`synchronized(this)`方法时，其他线程访问对`object`其他所有的`synchronized(this)`方法访问将会阻塞。
+
+#### 2.2.6 synchronized(this) 代码是锁定当前对象的
+
+#### 2.2.7 将任意对象作为对象监视器
+`synchronized`方法与`synchronized(this)`都具有：
+1. 对其他`synchronized`方法与`synchronized(this)`同步块调用呈阻塞状态
+2. 同一时间只有一个线程执行当前`synchronized`方法块或`synchronized(this)`中的代码
+
+`java`中支持对`任意对象`(注意此处是对象，基础的值类型可是不行的哦)作为“对象监视器”来实现同步功能，使用格式 `synchronized(非this)`
+
+测试类：[SyncBlockString.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SyncBlockString.java)
+
+#### 2.2.8 细化验证3个结论
+`synchronized(非this对象x)`即意味着将对象`x`作为`对象监视器`，可以得出以下3个结论：
+1. 多个线程同时执行`synchronized(x)`代码块时呈同步效果
+2. 其他线程执行`x`对象中的`synchronized`同步方法时呈同步效果
+3. 其他线程执行`x`对象中的`synchronized(this)`代码块时呈同步效果 （2、3点是`x`对象中本身还有相关的同步方法）
+
+测试类：[SyncLockObjInsideSyncMethod.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SyncLockObjInsideSyncMethod.java)
+
+#### 2.2.9 静态同步synchronized方法与synchronized(class)代码块
+`synchronized`可以应用在`static`静态方法上，这样表示对当前的`XX.java`文件对应的`Class`类进行持锁，等同于`synchronized(XX.class)`，会从`class`级别全局阻塞`class`锁，但不会阻塞实例的同步方法（非静态同步方法）。
+
+测试类：[SyncStaticMethod.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SyncStaticMethod.java)
+
+#### 2.2.10 数据类型String的常量池特性
+`JVM`具有`String`常量池缓存的功能，所以使用`String`作为监控锁对象不小心时可能会带来一些意外。所以一般`synchronized`代码块不使用`String`,改用其他如`new Object()`。
+
+测试类：[StringConstantTrait.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/StringConstantTrait.java)
