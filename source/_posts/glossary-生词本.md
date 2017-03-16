@@ -10,6 +10,7 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+trait       特性；少许
 assembly    装配；集会
 interrupt   打断；阻止
 instead     代替；反而
