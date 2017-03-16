@@ -281,3 +281,9 @@ Skills:
 **关键字`synchronized`取的锁都是对象锁，而不是把一段代码或方法当作锁**
 
 两个线程访问同一个类的的不同实例的相同同步方法，因为创建了不同的实例，系统将根据实例个数产生锁。测试类: [TwoObjectTwoLock.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/TwoObjectTwoLock.java)
+
+#### 2.1.4 synchronized 方法与锁对象
+* `A线程`先持有`object`对象的`Lock`锁，`B线程`可以调用`object`对象中的非`synchronized`类型的方法。
+* `A线程`先持有`object`对象的`Lock`锁，`B线程`调用`object`对象中的`synchronized`类型的方法则需等待，也就是同步。
+
+测试类：[SynchronizedMethodLockObject.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SynchronizedMethodLockObject.java)
