@@ -287,3 +287,14 @@ Skills:
 * `A线程`先持有`object`对象的`Lock`锁，`B线程`调用`object`对象中的`synchronized`类型的方法则需等待，也就是同步。
 
 测试类：[SynchronizedMethodLockObject.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/SynchronizedMethodLockObject.java)
+
+#### 2.1.5 脏读
+脏读出现在不同线程“争抢”实例变量的结果，即`2.1.4`中非同步方法随时可取共享资源就会造成脏读。
+
+#### 2.1.6 synchronized 锁重入
+线程进入`synchronized`方法调用本对象的另一个`synchronized`方法时，是永远可以得到锁的。即进入`synchronized`方法后可以无阻塞畅游本实例的所有方法了(当然这里不包括访问其他实例的`synchronized`方法)
+
+#### 2.1.7 出现异常，锁自动释放
+当一个线程执行代码出现异常时，其所持有的锁会自动释放。
+
+测试类：[ExceptionAutoReleaseLock.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ExceptionAutoReleaseLock.java)
