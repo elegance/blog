@@ -7,6 +7,18 @@ tags:
 
 <hr>
 
+### 2017年3月17日10:56:38 （java性能调优）
+1. jps、jstack等工具排查问题、微信收藏java 排查问题文章的整理
+    1. [JVM调优之jstack找出最耗cpu的线程并定位代码](http://www.cnblogs.com/chengJAVA/p/5821218.html)
+    2. [ Java自带的性能监测工具用法简介——jstack、jconsole、jinfo、jmap、jdb、jsta、jvisualvm](http://blog.csdn.net/feihong247/article/details/7874063)
+2. javap 查看编译版本信息，主要用于`Bad version`错误，[使用javap命令查看编译版本信息](http://www.blogjava.net/aoxj/archive/2013/02/17/395349.html)
+3. [编码最佳实践](http://www.blogjava.net/aoxj/MyPosts.html)
+    1. [编码最佳实践(5)--小心！这只是冰山一角](http://www.blogjava.net/aoxj/archive/2012/09/06/387170.html) - 意想不到的保留了原始对象的引用
+4. [java线程安全总结](http://www.iteye.com/topic/806990) 其中有`有序性`相关，待消化
+5. 好文[sun的java编译器对string常量表达式的处理和优化](http://www.blogjava.net/aoxj/archive/2007/12/05/165536.html) - 关键字：编译器优化、运行时、基本类型、常量优化、final、final 方法
+6. [浅谈spring和依赖注入的价值](http://www.blogjava.net/aoxj/archive/2008/01/11/174728.html) - 关键字：解耦、抽象、分离、provider，扩展思考：依赖注入--对比--内部接口实现、容器IOC
+7. [java常见面试题](http://blog.csdn.net/Soft_Po/article/details/53761198)
+
 ### 2017年3月14日09:27:57（构师-类图-设计）
 1. [ 架构师之UML类别图，顺序图，用例图，活动图](http://blog.csdn.net/wqewq19/article/details/52931890)
 
