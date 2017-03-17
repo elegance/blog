@@ -356,3 +356,64 @@ Skills:
 `JVM`具有`String`常量池缓存的功能，所以使用`String`作为监控锁对象不小心时可能会带来一些意外。所以一般`synchronized`代码块不使用`String`,改用其他如`new Object()`。
 
 测试类：[StringConstantTrait.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/StringConstantTrait.java)
+
+#### 2.2.11 同步sychronized方法无限等待与解决
+同步方法容易造成死循环，让其他线程得不到运行机会。
+
+测试类：[TwoStop.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/TwoStop.java)
+
+这个其实还得与具体的业务分析，不同的同步方法，是否涉及同一个资源访问的读写，如果不涉及则可以使用不同的"监控锁对象"（以上举例的测试类，在真正的业务场景中基本不会这样）
+
+比如按业务不同，定义不同的锁对象，测试类：[TwoStopMultiLockObj.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/TwoStopMultiLockObj.java)
+
+#### 2.2.12 多线程的死锁
+`java`线程死锁是一个经典的问题，造成的原因是不同的线程在等待不可能被释放的锁。
+
+这里我自己脑补了一个来帮助理解死锁的例子:
+
+测试类：[DeadLockTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/DeadLockTest.java)
+
+死锁是因为`阿毛`：`先锁坑位，再锁纸`不走寻常人的路，`阿毛他爹`、`阿毛麻麻`是：`先锁纸，再锁坑位`，导致`阿毛全家`都不能正常上厕所了。 如果注释掉`阿毛`，其他人都能正常排队的上厕所，反之注释掉其他人，`阿毛`一个人也玩的转，他们同时来就会发生死锁。
+
+避免死锁：**对多个资源(数据库表、对象)同时加锁时，需要保持一致的加锁顺序**
+
+运行程序后可以看到应用`假死`了，这是我们可以用`jps` 查看下运行的`java`进程的信息，得到`pid`，然后使用 `jstack -l pid`，可以看出`线程`在等待哪个对象的锁，而这把锁现在正被哪个线程锁持有，可以看出这里的死锁就是两个线程互相持有了对方等待的锁。
+
+```shell
+$ jps 
+    -q 只显示pid，不显示class名称,jar文件名和传递给main 方法的参数
+    -m 输出传递给main 方法的参数，在嵌入式jvm上可能是null
+    -l 输出应用程序main class的完整package名 或者 应用程序的jar文件完整路径名
+    -v : 详细信息
+
+$ jstack
+    -l 
+```
+
+#### 2.2.13 内置类与静态内置类
+内部类依赖其外部类实例来实例化：`new External().new InnerClass()`， 静态内部类则可以直接：`new InnerStaticClass()`，实例化时不依赖外部类实例
+
+测试类：[ExternalClass.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ExternalClass.java) 、[RunTestExternalClass.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/RunTestExternalClass.java)
+
+```
+// 内部类， 把类比喻成一个鸡蛋，内部类是蛋黄，外部类是蛋壳
+// 普通内部类(非static) 那相当于生鸡蛋，没有鸡蛋壳（外部类没有实例化），蛋黄也就不复存在 ----- 生鸡蛋： 壳之不存，黄之焉附
+// 内部静态类 , 相当于熟鸡蛋，没有鸡蛋壳，蛋黄也可以是完好的（可以实例化）， -----  熟鸡蛋：唇亡齿寒 ，照样可以嚼东西（没有蛋壳，蛋黄可以用来做卤蛋呀...）
+
+// 内部类没有 `public`标识时，只有在同一个包的其他类可访问、实例化
+```
+
+#### 2.2.14 内置类与同步：实验1
+测试类：[OutClzSyncTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/OutClzSyncTest.java) 、[RunOutClzSyncTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/RunOutClzSyncTest.java)
+
+这里很好理解，由于`method1`与`method2`持有不同的“对象监视器”，所以他们是异步非阻塞，打印结果是乱序的。
+
+#### 2.2.15 内置类与同步：实验2
+测试类：[OutClzSyncTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/OutClzSyncTest2.java) 、[RunOutClzSyncTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/RunOutClzSyncTest2.java)
+
+这里用我们上面学到知识就可以理解了，A1、A2 使用了不同锁，非阻塞异步执行，A1、B1争抢一把锁，A1释放锁后B1才可拿锁执行。
+
+#### 2.2.16 锁对象的改变
+测试类：[ChangeLockString.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ChangeLockString.java)
+
+从测试类发现：A、B线程锁对象`lock`，就算值发生了改变，他们持有的锁都是“123”，还是起到了同步的效果，C、D线程进一步验证了只要对象不变，即使对象的属性被改变，其运行结果还是同步的。
