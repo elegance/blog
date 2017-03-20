@@ -10,6 +10,7 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+peek        偷看；窥视
 trait       特性；少许
 assembly    装配；集会
 interrupt   打断；阻止
