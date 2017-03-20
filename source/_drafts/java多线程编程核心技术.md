@@ -455,3 +455,66 @@ $ jstack
 #### 2.3.7 synchronized 代码块有volatile同步的功能
 关键字`synchronized`可以使多个线程访问同一个资源具有同步性，而且还具有将线程工作内存中的私有变量与公共内存中的变量同步的功能。
 
+## 线程间通信
+Skills:
+* 使用`wait/notify` 实现线程间的通信
+* 生产者/消费者模式的实现
+* 方法`join`的使用
+* `ThreadLocal`的使用
+
+### 3.1 等待/通知机制
+线程与线程之间不是独立的个体，他们彼此之间可以互相通信和协作。
+
+#### 3.1.1 不使用等待/通知机制实现线程间通信
+测试类：[TwoThreadTransData.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/TwoThreadTransData.java)
+
+线程`thread-b`循环中不断检测一个条件，轮循时间小，会造成浪费CPU资源，轮循间隔大时，响应不会实时。 所以要出现了`wait/notify`机制。
+
+#### 3.1.2 什么是等待/通知机制
+比如：`厨师`完成一道菜的时间不确定，`服务员`需要将这道菜，送给就餐者。
+
+如果不是“等待/通知”机制：`服务员`不断的询问`厨师`菜完成了没...
+
+有了“等待/通知”机制择时：`服务员`坐等(wait)，`厨师`完成菜品即告诉(notify)`服务员`。
+
+#### 3.1.3 等待/通知机制的实现
+**`wait`使线程暂停执行，而`notify`唤醒其他线程继续执行**
+
+`wait()`方法使当前执行代码的线程进行等待，`wait()`方法是`Object`类的方法，该方法将当前线程置入“预执行队列中”，并且在`wait()`所在代码处停止，直到接到通知或被中断。
+```
+调用`wait()`方法前必须获得该对象实例的锁，即只能再同步代码内中调用`wait()`方法，否则将抛出`IllegalMonitorStateException`，`wait()`方法后，当前线程释放该对象实例的锁。
+```
+`notify()`方法也需要或得对象实例的锁，该方法用来通知那些可能等待该对象的对象锁的其他线程，如果有多个线程等待，则有线程规划器随机挑出一个呈`wait`状态的线程，对其发出通知notify。
+```
+执行`notify()`方法后，当前线程不会马上释放该对象的锁，呈wait状态的锁不会马上获得锁，而是要等执行`notify()`方法所在同步块执行完。
+```
+
+简单体现`wait/notify`, 测试类：[TestWaitNotify.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/TestWaitNotify.java)
+
+实现之前提到的`当公共变量==5时退出一个线程`, 测试类：[WaitNotifyWhen5.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/WaitNotifyWhen5.java)
+
+`运行--就绪--等待  （用单核cpu的方式去立即：同一时刻只有一个线程被执行，所以有了就绪队列）`:
+**每个锁对象都有两个队列，一个是就绪队列，一个是阻塞队列。就绪队列存储了将要获得锁的线程，阻塞队列存储了被阻塞的线程。一个线程被唤醒后，才会进入就绪队列，等待CPU调度；反之，一个线程被wait后，就会进入阻塞队列，等待下一次被唤醒**
+（在执行没有“wait/notify”的同步代码块时，可以理解为：取锁未得则是进入`隐式的wait`，其他线程释放锁，则自动`隐式notify`了`隐式wait`的线程）
+
+#### 3.1.4 方法wait()锁释放与notify()方法锁不释放
+当方法`wait()`被执行后，锁自动释放，但执行完`notify()`方法，锁是不自动释放的，还有在同步代码块内`sleep()`方法也是不会释放锁的。 这些其实在上面的例子中都已经有体现了。
+
+#### 3.1.5 当interrup方法遇到wait方法
+当线程呈`wait`状态时，调用线程对象的`interrupt()`方法会出现`InterruptedException`异常。
+
+#### 3.1.6 只通知一个线程
+调用`notify()`方法一次只~~随机~~(wait队列poll出一个)通知一个线程进行唤醒。
+
+测试类：[NotifyOne.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/NotifyOne.java)
+
+#### 3.1.7 唤醒所有线程
+调用`notifyAll()`方法将唤醒wait队列中的所有线程。
+
+#### 3.1.8 方法wait(long)的使用
+带一个参数`wait(long)`方法的功能是等待指定的时间，如果指定时间内没有被`notify`将自动苏醒。
+
+无人唤醒，自动苏醒，测试类：[WaitHasParamMethod.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/WaitHasParamMethod.java)
+
+#### 3.1.9 通知过早
+"服务员"还没过来等待，“厨师”做完菜就发出了通知。也就是 一个线程notify 发生在另外一个线程wait之前。解决这种问题是在调用wait方法前判断，如果先通知了，则wait方法就没必要执行了。
