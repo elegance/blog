@@ -417,3 +417,41 @@ $ jstack
 测试类：[ChangeLockString.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ChangeLockString.java)
 
 从测试类发现：A、B线程锁对象`lock`，就算值发生了改变，他们持有的锁都是“123”，还是起到了同步的效果，C、D线程进一步验证了只要对象不变，即使对象的属性被改变，其运行结果还是同步的。
+
+### 2.3 volatile 关键字
+`volatile`关键字的主要作用是使变量在多个线程间可见。强制从**公共堆栈**中取得变量值，而不是从**线程私有数据**取得变量的值
+
+测试类：[VolatileCompare.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/VolatileCompare.java)
+
+测试类输出结果可以看出，没有`volatile`标识的变量，`threadA`根本不理会主线程对这个变量的修改，线程会一直运行；而依赖`volatile`修饰变量运行的线程，可以得到主线程的修改，线程得以正常退出。
+
+![-server为了线程效率，从私有堆栈中取值](/images/java-thread/java-thread-memory.jpg)
+
+![volate强制从公共堆栈中取值](/images/java-thread/volatile-force-main-memory.jpg)
+
+#### 2.3.1 关键字volatile与死循环--单线程死循环，下一步的停止标识设置没有机会执行
+#### 2.3.2 解决同步死循环--(多线程解决，新启线程来设置停止标识)
+#### 2.3.3 解决异步死循环--(-server 不读取主堆栈问题，使用volatile解决，强制读主堆栈内存)
+
+#### 2.3.4 volatile 非原子的特性
+虽然`volatile`虽然实现了共享资源在多个线程间的可见性，但它却不具备同步性，那么也就不具备原子性(个人理解：变量本身没有原子性，对变量的操作才有原子性一说)。
+
+测试类：[CounterVolatileUnsafe.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/CounterVolatileUnsafe.java)
+
+`volatile`只是增加了多线程间共享资源的透明度，上面的执行结果有可能出现的是你的期望值`10000`，这只是提高了他出现的几率，这也体现了线程安全问题的难以测试和问题偶发性。
+
+#### 2.3.5 使用原子类进行i++ 操作
+从jdk1.5起开始提供了`AtomicXX`的一些原子类，这些类是乐观锁的一种CAS(Compare And Swap)的实现，其利用JNI调用CPU指令实现。
+
+主要提供了：`AtomicInteger`、`AtomicBoolean`、`AtomicLong`供基础数据类型的操作，`AtomicReference<V>`对象数据操作，`AtomicStampedRefrence<V>`来操作对象并解决`ABA`的问题
+
+`AtomicInteger`完成i++, 测试类：[AtomicIntegerTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/AtomicIntegerTest.java)
+`AtomicReference<V>`模拟栈，测试类：[AtomicStack.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/statc-atomicVsSync/AtomicStack.java)
+`AtomicStampedRefrence<V>`解决ABA问题，测试类：[ABA.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/CAS/ABA.java)
+
+#### 2.3.6 原子类也并不完全安全
+这里其实主要说明的是多个原子类方法间是不安全的，单个原子类方法没有问题。
+
+#### 2.3.7 synchronized 代码块有volatile同步的功能
+关键字`synchronized`可以使多个线程访问同一个资源具有同步性，而且还具有将线程工作内存中的私有变量与公共内存中的变量同步的功能。
+
