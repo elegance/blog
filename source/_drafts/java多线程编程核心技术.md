@@ -493,9 +493,12 @@ Skills:
 
 实现之前提到的`当公共变量==5时退出一个线程`, 测试类：[WaitNotifyWhen5.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/WaitNotifyWhen5.java)
 
-`运行--就绪--等待  （用单核cpu的方式去立即：同一时刻只有一个线程被执行，所以有了就绪队列）`:
-**每个锁对象都有两个队列，一个是就绪队列，一个是阻塞队列。就绪队列存储了将要获得锁的线程，阻塞队列存储了被阻塞的线程。一个线程被唤醒后，才会进入就绪队列，等待CPU调度；反之，一个线程被wait后，就会进入阻塞队列，等待下一次被唤醒**
-（在执行没有“wait/notify”的同步代码块时，可以理解为：取锁未得则是进入`隐式的wait`，其他线程释放锁，则自动`隐式notify`了`隐式wait`的线程）
+**`运行--就绪--等待**  （用单核cpu的方式去立即：同一时刻只有一个线程被执行，所以有了就绪队列）`:
+**每个锁对象都有两个队列，一个是就绪队列(竞争锁)，一个是阻塞队列(wait待唤醒)。就绪队列存储了将要获得锁的线程，阻塞队列存储了被阻塞的线程。一个线程被唤醒后，才会进入就绪队列，等待CPU调度；反之，一个线程被wait后，就会进入阻塞队列，等待下一次被唤醒**
+
+关于`就绪队列`与`阻塞队列`顺序相关
+1. 就绪队列，进入方法的顺序与竞争得到锁的顺序，测试类：[CompeteOrder.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/CompeteOrder.java)
+2. 阻塞队列，wait触发的顺序与被唤醒的顺序，测试类：[WaitOrder.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/WaitOrder.java)
 
 #### 3.1.4 方法wait()锁释放与notify()方法锁不释放
 当方法`wait()`被执行后，锁自动释放，但执行完`notify()`方法，锁是不自动释放的，还有在同步代码块内`sleep()`方法也是不会释放锁的。 这些其实在上面的例子中都已经有体现了。
@@ -518,3 +521,60 @@ Skills:
 
 #### 3.1.9 通知过早
 "服务员"还没过来等待，“厨师”做完菜就发出了通知。也就是 一个线程notify 发生在另外一个线程wait之前。解决这种问题是在调用wait方法前判断，如果先通知了，则wait方法就没必要执行了。
+
+#### 3.1.10 等待wait的条件发生变化
+要注意wait所依赖的条件变化，多个线程在wait，有可能条件检验已经过期，测试类：[WaitOld.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/WaitOld.java)
+
+#### 3.1.11 生产者/消费者模式实现
+`生产者消费者：互相通知，互相等待`
+
+1. 一生产者与一消费者：操作值，测试类：[ProducerConsumerTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ProducerConsumerTest.java)
+2. 多生产者与多消费：操作值-假死，测试类：[ProducerConsumerAllWait.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ProducerConsumerAllWait.java)
+3. 多生产者与多消费：操作值，将上面中的`notify`改为`notifyAll`，唤醒所有。
+4. 一生产与一消费：操作栈，测试类：[ProducerConsumerStack.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ProducerConsumerStack.java)
+5. 一生产与多消费：操作栈，测试类：[ProducerMulConsumerStack.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ProducerMulConsumerStack.java)
+
+#### 3.1.12 通过管道进行线程间通信：字节流
+`Java`语言中提供了各种各样的`输入/输出` 流`Stream`，能方便的对数据进行操作，其中`管道流`(`pipeStream`)是一种特殊的流，用于在不同线程间直接传送数据。
+
+字节流通信，测试类：[PipedInputOutput.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/PipedInputOutput.java)
+
+#### 3.1.13 通过管道进行线程间通信：字符流
+字符流通信，测试类：[PipedReaderWriter.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/PipedReaderWriter.java)
+
+#### 3.1.14 实战：等待/通知之交叉备份
+创建20个线程，其中10个线程将数据备份至A数据库，另外10个线程将数据备份至B数据库，并且备份A数据库和备份B数据库交叉进行。
+
+测试类：[WaitNotifyInsert.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/WaitNotifyInsert.java)
+
+### 3.2 方法join的使用
+在很多情况下，主线程创建并启动子线程，如果子线程耗时较久，主线程往往将早于子线程结束。这这时如果主线程想等待子线程完成之后做操作，就可以使用`join()`方法了。
+
+#### 3.2.1 学习方法join前的铺垫
+比如我们需要 T1、T2、T3 三个线程按先后顺序执行，没有join方法可以尝试这么做：
+```java
+T1.start();  T1.sleep(xxx);
+T2.start();  T2.sleep(xxx);
+T3.start();
+```
+问题就在于 上面的xxx时间我们无法确定，因为每个线程运行多久我们不能确定， 设值长了，程序会浪费等待时间，设值短了，可能出现顺序不对。
+
+#### 3.2.2 用join方法解决
+```java
+T1.start();  T1.join();
+T2.start();  T2.join();
+T3.start();
+```
+这样就能保证三个线程依次执行了。
+
+#### 3.2.3 方法join与异常
+#### 3.2.4 方法join(long)的使用
+```java
+childThread.join(1000); //执行这个方法所在的线程最多等待 1000ms，
+    Thread.sleep(1000); //这个方法会无论如何等待 1000ms
+如果子线程执行的时间超过1000ms，那么他们所看起来的效果是一致的。    
+```
+
+#### 3.2.5 方法 join(long) 与 sleep(long)的区别
+`join(long)`方法内部是使用`wait(long)`实现的，所以`join(long)`方法也具有释放锁的特点， 而`sleep(long)`方法不会释放锁。
+
