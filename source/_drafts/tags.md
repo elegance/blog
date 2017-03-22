@@ -46,7 +46,9 @@ tags:
             rocketMQ、kafka
         测试：
             JMH基准测试
-        基础：
+        JAVA基础：
+            http://www.runoob.com/java/java-data-structures.html
+        JVM基础
             JVM-http://blog.csdn.net/vernonzheng/article/details/8458483
 
 工具：
