@@ -6,6 +6,8 @@ tags:
 建立这个`Read Later`的初衷：一些好的资料没有吸收完全，用其它闲暇的时间来继续吸收，手机、其他PC都可访问。
 
 <hr>
+### 2017年3月24日09:59:55
+1. [oauth2简单原理描述](http://blog.csdn.net/yunnysunny/article/details/17482175)
 
 ### 2017年3月17日10:56:38 （java性能调优）
 1. jps、jstack等工具排查问题、微信收藏java 排查问题文章的整理
