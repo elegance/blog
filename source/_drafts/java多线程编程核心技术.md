@@ -606,3 +606,31 @@ childThread.join(1000); //执行这个方法所在的线程最多等待 1000ms�
 #### 3.4.1 值继承
 #### 3.4.2 值继承再修改
 测试类：[InheritableThreadLocalTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/InheritableThreadLocalTest.java)
+
+## 4. Lock的使用
+Skills:
+* `ReentrantLock`类的使用
+* `ReentrantReadWriteLock`类的使用
+
+### 4.1 使用 ReentrantLock类
+在`java`多线程中，可以使用`synchronized`关键字来实现线程之间同步互斥，但在`jdk1.5`中新增了`ReentrantLock`类也能达到同样的效果，并且在扩展功能上也更加强大，比如有嗅探锁定、多路分支通知等功能，使用上比`synchronized`更加灵活。
+
+#### 4.1.1 使用 ReentrantLock类实现同步
+测试类：[ReentrantLockTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReentrantLockTest.java)
+
+#### 4.1.2 使用 ReentrantLock类实现同步: 测试2
+测试类：[ReentrantLockTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReentrantLockTest2.java)
+
+#### 4.1.3 使用Condition 实现等待/通知：错误用法与解决
+关键字 `synchronized`与`wait()`和`notify()/notifyAll()`方法结合可以实现等待/通知模式，类`ReentrantLock`实现同样的功能是借助于`Condition`对象。`Condition`是JDK5中出现的技术，使用它有更好的灵活性，比如实现多路通知的功能，也就是在一个`Lock`对象中可以创建多个`Condition`对象实例，线程对象可以注册在指定的`Condition`中，从而可以有选择性地进行线程通知，在调度线程上更加灵活。
+
+测试类：[UseConditionWaitNotifyError.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/UseConditionWaitNotifyError.java)
+
+#### 4.1.4 正确使用Condition实现等待/通知
+测试类：[UseConditionWaitNotifyOK.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/UseConditionWaitNotifyOK.java)
+
+成功的实现了等待/通知模式。
+* `Object`类中的`wait()`相当于`Condition`类中的`await()`方法， 线程进入`WAITING`状态。
+* `Object`类中的`wait(long timeout)`相当于`Condition`类中的`await(long time, TimeUnit unit)`方法， 线程进入`TIMED_WAITING`状态。
+* `Object`类中的`notify()`相当于`Condition`类中的`signal()`方法
+* `Object`类中的`notifyAll()`相当于`Condition`类中的`signalAll()`方法
