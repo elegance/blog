@@ -577,10 +577,32 @@ childThread.join(1000); //执行这个方法所在的线程最多等待 1000ms�
 
 #### 3.2.5 方法 join(long) 与 sleep(long)的异同
 `join(long)`方法内部是使用`wait(long)`实现的，所以`join(long)`方法也具有释放锁的特点， 而`sleep(long)`方法不会释放锁。
+
 相同：
 1. 调用`sleep`与`join`方法来达到阻塞当前线程的目的
 
 不同：
 1. `sleep(long)`为`Thread类static`方法，`join(long)`为`Thread实例的方法`，故需要注意他们作用于的线程区别
-1. 作用于普通的非同步方法中区别就是：`sleep(long)`等待固定时间、`join(long)`最多等待这么久的时间
-2. 在同步
+2. 作用于普通的非同步方法中区别就是：`sleep(long)`等待固定时间、`join(long)`最多等待这么久的时间
+
+具体深入对比可以查看: [Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗](http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/)
+
+### 3.3 类ThreadLocal的使用
+类变量的共享可以采用`public static`形式，所有线程都使用同一个`public static`变量。 如果想要实现每个线程都有自己的共享变量呢？ `JDK`提供的类`ThreadLocal`正是为了解决这个问题的。
+
+* 局部变量：方法内，不同享，与实例和线程都无关。
+* 全局变量：类内，共享实例变量，在不同的线程、或方法间达到共享
+* 全局静态：类内，共享静态变量，不同线程间访问达到共享，`静态`与实例无关。
+
+#### 3.3.1 方法 get() 与 null
+#### 3.3.2 验证变量的隔离性
+#### 3.3.3 解决 get() 返回 null问题
+#### 3.3.4 再次验证线程变量的隔离性
+测试类：[VerifyIsolation.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/VerifyIsolation.java)
+
+### 3.4 类 InheritableThreadLocal 的使用
+使用`InheritableThreadLocal`可以在子线程取得父线程继承下来的值。
+
+#### 3.4.1 值继承
+#### 3.4.2 值继承再修改
+测试类：[InheritableThreadLocalTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/InheritableThreadLocalTest.java)
