@@ -86,7 +86,9 @@ tags:
     Linux:
         日常运维：环境、防火墙、系统配置、应用配置
 
-
+    安全：
+        cookie sessionid/http-only/xss/https/
+        防攻击 验证码、频率限制、黑白名单
 
     java 应用：
         rap : mock数据、定义接口、生成接口文档
@@ -101,6 +103,10 @@ tags:
             CDN
 
             数据库优化
+    加减速算:
+        http://www.360doc.com/content/14/0423/17/15921762_371465948.shtml
+    基础进制码表
+        十进制、十六进制、二进制
     
     简历参考：
         [郑昀](http://www.cnblogs.com/zhengyun_ustc/archive/2005/05/19/zhengyun_2006_chinese_resume.html)
