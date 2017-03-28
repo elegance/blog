@@ -634,3 +634,62 @@ Skills:
 * `Object`类中的`wait(long timeout)`相当于`Condition`类中的`await(long time, TimeUnit unit)`方法， 线程进入`TIMED_WAITING`状态。
 * `Object`类中的`notify()`相当于`Condition`类中的`signal()`方法
 * `Object`类中的`notifyAll()`相当于`Condition`类中的`signalAll()`方法
+
+#### 4.1.5 使用Condition实现通知部分线程：错误用法
+测试类：[MustUseMoreConditionError.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/MustUseMoreConditionError.java)
+
+两个方法共用一个`Condition`，不能体现区别唤醒，`thread-A`、`thread-B`两个线程启动分别调用了同一个`condition`的`await()`方法，线程都进入了`WAITING`状态，最后主线程同时唤醒的是两个线程。
+
+#### 4.1.6 使用多个Condition实现通知部分线程：正确用法
+测试类：[MustUseMoreConditionOK.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/MustUseMoreConditionOK.java)
+
+此时两个方法分别使用了`conditionA`、`conditionB`，主线程调用了`conditoinA.signalAll()`达到了只唤醒`thread-A`的效果，`thread-B`继续`WAITING`
+
+#### 4.1.7 实现生产者/消费者：一对一交替打印
+测试类：[ConditionTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ConditionTest.java)
+
+#### 4.1.8 实现生产者/消费者：多对多交替打印
+测试类：[ConditionTestManyToMany.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ConditionTestManyToMany.java)
+
+类似`Object`的`notify()`方法，`signal()`方法同样也会造成假死的现象，这是因为`生产者`与`消费者`使用的是同一个`Condition`，`signal()`方法在我们期望通知`消费者`时，可能通知到的是`另一个消费者`，反之消费者发出的通知也是一样的。所以这里也采取了`signalAll()`方法发出信号一并唤醒。
+
+#### 4.1.9 公平锁与非公平锁
+公平与非公平锁：锁`Lock`分为`公平锁`和`非公平锁`, 公平锁表示线程获取锁的顺序是按照线程加锁的顺序来分配的，即先来先得的`FIFO`先进先出的顺序。 而非公平锁就是一种获取锁的抢占机制，是随机获得锁的。
+
+测试类：[FairNoFairTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/FairNoFairTest.java)
+* 公平锁 ，开始运行与得锁顺序呈有序
+* 非公平锁， 开始运行与得锁顺序基本上是乱序的
+
+#### 4.1.10 方法getHoldCount()、getQueueLength()、getWaitQueueLength()
+* `int getHoldCount()` 方法是**查询当前线程保持此锁的个数**，也就是调用 `lock()`方法的次数。测试类：[LockMethodHoldCount.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodHoldCount.java)
+* `int getQueueLength()` 方法是返回**等待获取此锁的线程估计数** 测试类：[LockMethodQueueLength.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodQueueLength.java)
+* `int getWaitQueueLength(Condition condition)` 方法是返回**等待此锁相关条件Condition的线程估计数** 测试类：[LockMethodWaitQueueLength.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodWaitQueueLength.java)
+
+这里的体现其实与之前`synchronized`内部锁达一致：锁的两个队列，getQueueLength() 取的是针对此锁 在`BLOCKED` 就绪阻塞线程，`getWaitQueueLength(Condition condition)` 则是`WAITING`睡眠等待唤醒的线程
+
+#### 4.1.11 方法 hasQueuedThread()、hasQueuedThreads() 和 hasWaiters()的测试
+* `boolean hasQueuedThread(Thread thread)` 查询指定的线程是否等待获取此锁。
+* `boolean hasQueuedThreads()` 查询是否有线程正在等待获取此锁。
+
+测试类：[LockMethodHasQueued.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodHasQueued.java)
+
+* `boolean hasWaiters(Condition condition)` 查询是否有线程正在等待此锁有关的`condition`条件,测试类：[LockMethodHasWaiters.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodHasWaiters.java)
+
+#### 4.1.12 方法 isFair()、isHeldByCurrentThread() 和 isLocked() 的测试
+* `boolean isFair()` 判断锁是不是公平锁，默认情况下`ReentrantLock`是`非公平锁`
+* `boolean isHeldByCurrentThread()` 查询当前线程是否保持此锁定。
+* `boolean isLocked()` 查询此锁是否有线程保持锁定。
+
+测试类：[LockMethodIsHeldByCurrentThread.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodIsHeldByCurrentThread.java)
+
+#### 4.1.13 方法 lockInterruptibly()、tryLock() 和 tryLock(long timeout, TiemUnit unit) 的测试
+* `void lockInterruptibly()` ：取锁，如果当前线程未被中断，则获取锁定，如果已经被终端则出现异常。测试类：[LockMethodInterruptiblyTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodInterruptiblyTest.java)
+* `boolean tryLock()` : 取锁，尝试取锁，如未取得则返回false。
+* `boolean tryLock(long timeout, TimeUnit unit)`：取锁，指定时间内如未取得锁，取锁失败返回false
+
+测试类：[LockMethodTryLock.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodTryLock.java)
+
+#### 4.1.14 方法 awaitUninterruptibly() 的使用
+测试类：[LockMethodAwaitUninterruptibly.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodAwaitUninterruptibly.java)
+
+`awaitUninterruptibly()`方法不同于`await()`，前者将不理会`interrupt()`动作，继续执行，而`await()`在线程触发`interrupt()`动作时将正常抛出异常。
