@@ -772,3 +772,10 @@ Skills:
 **`schedule`: 如果任务的执行时间点已经过去，任务将在上次完成的时间基础上加上周期时间执行，首次任务的时间已经过去则会立即执行**  [基础点按周期顺延] -- 按周期、不具追赶执行性
 
 测试类：[TimerTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest4.java)
+
+#### TODO 大总结： 
+* 锁存在的意义
+* 相关类 方法一览,截图
+* `synchronized` ,内部锁， 锁对象， Object() 类方法：截图  wait()/wait(long)、notify()、notifyAll()
+* `LOck`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
+* `Timer`类方法
