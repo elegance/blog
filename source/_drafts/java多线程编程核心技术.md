@@ -693,3 +693,32 @@ Skills:
 测试类：[LockMethodAwaitUninterruptibly.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodAwaitUninterruptibly.java)
 
 `awaitUninterruptibly()`方法不同于`await()`，前者将不理会`interrupt()`动作，继续执行，而`await()`在线程触发`interrupt()`动作时将正常抛出异常。
+
+#### 4.1.15 方法 awaitUntil() 的使用
+测试类：[LockMethodAwaitUntil.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodAwaitUntil.java)
+
+#### 4.1.16 使用 Condition 实现顺序执行
+测试类：[ConditionABC.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ConditionABC.java)
+
+
+### 4.2 使用 ReentrantReadWriteLock 类
+类`ReentrantLock`具有完全互斥排他的效果，即同一时间只有一个线程在执行`ReentrantLock.lock()`方法后的任务。这样虽然保证了实例变量的线程安全性，但效率确实低下的。所以`JDK`提供了一种读写锁`ReentrantReadWriteLock`类，使他可以加快运行效率，在某些不需要操作实例变量的方法中，完全可以使用读写锁`ReentrantReadWriteLock`来提升该方法的代码运行速度。
+
+读写锁表示有两个锁，一个是读操作相关的锁，也称为共享锁；另一个是写操作相关的锁，也叫排他锁。
+
+多个读锁之间不互斥，读写与写锁互斥，写锁与写锁互斥。 在没有线程进行写操作时，进行读取操作的多个线程都可以获取读锁，而写操作的线程只有在获取写锁后才能进行写操作。
+
+即多个线程可以同时进行读取操作，但是同一时刻只允许一个线程进行写操作。
+
+### 4.2.1 类 ReentrantLockReadWriteLock 的使用：读读共享
+可以看出多个线程都获得了读锁`readLock`, 测试类：[ReadWriteLockBegin1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReadWriteLockBegin1.java)
+
+### 4.2.1 类 ReentrantLockReadWriteLock 的使用：写写互斥
+同意时刻，只有一个线程获得锁，写锁阻塞等待前一个线程释放锁, 测试类：[ReadWriteLockBegin2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReadWriteLockBegin2.java)
+
+### 4.2.3 类 ReentrantLockReadWriteLock 的使用：读写互斥
+### 4.2.4 类 ReentrantLockReadWriteLock 的使用：写读互斥
+**获得读锁未释放，写锁也会被阻塞，获得写锁未释放，读锁也会被阻塞**：测试类：[ReadWriteLockBegin3.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReadWriteLockBegin3.java)
+
+### 4.3 Lock 本章总结 
+完全可以使用`Lock`对象将`synchronized`关键字替换掉，而且其具有的功能是`synchronized`不具有的，`Lock`是`synchronized`的进阶。
