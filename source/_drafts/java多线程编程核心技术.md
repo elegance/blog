@@ -722,3 +722,53 @@ Skills:
 
 ### 4.3 Lock 本章总结 
 完全可以使用`Lock`对象将`synchronized`关键字替换掉，而且其具有的功能是`synchronized`不具有的，`Lock`是`synchronized`的进阶。
+
+
+## 5 定时器 Timer
+Skills:
+* 如何实现指定时间执行任务
+* 如何实现按指定周期执行任务
+
+### 5.1 定时器 Timer 的使用
+`JDK`中`Timer`类主要负责计划任务的功能，也就是在指定时间开始执行某一任务。`Timer`的作用是设置计划任务，但是封装任务的类是`TimerTask`抽象类，所以具体要计划执行的任务继承`TimerTask`类即可。
+
+#### 5.1.1 方法 schedule(TimeTask task, Date time)
+指定的日期的时间执行一次任务。
+
+1. 执行任务的时间晚于当前时间：在未来的某个时间点执行 --- timer内部的TimerThread 在实例化时start，默认非守护线程，意味任务完成后，即使没有其他线程，程序不会结束，如果设定为守护线程，如果任务运行之前，其他非守护都已经结束，那么有可能任务还未执行，程序就已经结束。
+2. 计划时间早于当前时间：设定的时间点是已经过去 -- 时间点是过去，则会立即执行task任务
+
+    1,2 测试类：[TimerTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest1.java)
+
+3. 一个`Timer`中多个`TimerTask` 任务及延时的测试 -- 以计划执行的时间排队成队列，前者执行完后者再执行，当前者执行时间较长时会阻塞后面队列中的任务。
+    3 测试类：[TimerMultiTask.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerMultiTask.java)
+
+
+#### 5.1.2 方法 schedule(TimerTask task, Date firstTime, long period)
+指定日期的时间后，按指定间隔周期性的执行某一任务。
+1. 计划时间晚于当前时间：在未来某个时间点开始
+2. 计划时间早于当前时间：设定的开始时间是已经过去的 -- 立即开始周期任务
+3. 任务执行时间被延迟 -- 当间隔时间小于任务单次执行所要的时间时，后面的任务都被延时堆压，会越积越多，但还是一个一个顺序执行
+
+    1,2,3 测试类：[TimerTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest2.java)
+
+4. `TimerTask`类的`cancel`方法 -- 将自身任务从`Timer`任务队列中移除，其他任务不受影响
+    测试类：[TimerTaskCancel.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTaskCancel.java)
+5. `Timer`类的`cancel`方法 -- timer中的任务全部清除，timer内部线程销毁，程序退出
+    测试类：[TimerCancel.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerCancel.java)
+6. `Timer`的`cancel()` 方法注意事项 -- 调用`cancel()` 方法不一定会停止任务，当`cancel()`方法没有竞争到内部的`queue`锁时。
+
+#### 5.1.3 方法 schedule(TimerTask task, long delay)
+以当前时间为基准，延迟指定的毫秒数执行某一任务。
+    测试类：[TimerTest3.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest3.java)
+
+#### 5.1.4 方法 schedule(TimerTask task, long delay, long period)
+以当前时间为基准，延迟指定的毫秒数开始周期性的执行某一任务。
+    当前时间往后推3秒开始执行， 每3秒 执行一次myTask ,测试类：[TimerTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest4.java)
+
+#### 5.1.5 方法 scheduleAtFixedRate(TimerTask task, Date firstTime, long period)
+**`scheduleAtFixedRate`：如果任务的执行时间点已经过去，任务会在上次任务完成后立即执行** [基础点固定-立马] -- 具有追赶执行性
+
+**`schedule`: 如果任务的执行时间点已经过去，任务将在上次完成的时间基础上加上周期时间执行，首次任务的时间已经过去则会立即执行**  [基础点按周期顺延] -- 按周期、不具追赶执行性
+
+测试类：[TimerTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest4.java)
