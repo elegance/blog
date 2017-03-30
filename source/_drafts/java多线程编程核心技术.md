@@ -567,6 +567,8 @@ T3.start();
 ```
 这样就能保证三个线程依次执行了。
 
+另外注意：**如果`T1`内部启动了新的线程，`T1.join()`方法后面的代码不会等待`T1`新启的线程**
+
 #### 3.2.3 方法join与异常
 #### 3.2.4 方法join(long)的使用
 ```java
@@ -773,9 +775,45 @@ Skills:
 
 测试类：[TimerTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest4.java)
 
+## 6. 单例模式与多线程
+通过单例与多线程技术的结合，在这个过程中发现很多以前为考虑的问题，学习如何使单例模式遇到多线程时安全的。
+
+### 6.1 立即加载/"饿汉模式"
+在使用类之前类的对象就已经创建好了，中文语境来看，就是饿的迫不及待，有着急迫切的含义。实现的一般做法是：私有化构造方法，声明类全局静态变量，并实例化
+```java
+private static MyObject myObject = new MyObject();
+```
+测试类：[SigletonTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest1.java)
+
+注意看下上面例子不单是单例相关的演示，而且包括：静态资源初始化的问题，**会有一个奇怪的现象，多线程访问类的普通静态方法，不是立马返回结果，而是线程被“阻塞了”**
+
+* 静态资源初始化本身就是 单线程的(同步阻塞)，在类内部资源被初次访问时，触发静态初始化,初始化的顺序 是从上往下.
+* 被静态初始化“阻塞”的方法，不是阻塞"BLOCKD"状态，而是 "RUNNABLE" 状态
+
+其实这里应该也是`JVM`的一个编译优化，类如果被使用到，其静态的资源也不会被初始化加载。
+
+### 6.2 延迟加载/懒汉模式
+只有在`get()`时才被创建，从语境上看是“缓慢”、“不急迫”的含义。
+
+测试类：[SigletonTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest2.java)
+
+以上代码帮助理解"懒汉模式" + "DCL" 方式实现的单例，应对的绝大多数场景：`高并发取单例，低并发初始化实例`，巧妙的避免了`synchronized`的阻塞，又使用`synchronized`来保证单次实例化。
+
+
 #### TODO 大总结： 
 * 锁存在的意义
 * 相关类 方法一览,截图
 * `synchronized` ,内部锁， 锁对象， Object() 类方法：截图  wait()/wait(long)、notify()、notifyAll()
 * `LOck`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
 * `Timer`类方法
+* 补充 ThreadGroup、Thread.enumerate 等方法
+
+#### TODO 想到的几个问题
+1. 类内部的`public static xxMethod() {}` 有可能被阻塞吗？
+2. `thead.join()`方法内的`wait(0)`可以用`sleep(0)`代替实现吗？
+3. `thread.join()` 如果`thread`内部启动了新的线程，那么`thread.join()`后的代码会等待`thread`内部线程再执行吗？
+3. 线程基础 `Object.wait()`与 `Object.notify()` 都是干什么用的，怎么用的？
+4. 怎么看待单例模式中懒汉模式结合`DCL`的方式解决线程安全问题？ 
+> 初期理解，以高并发初次实例化的场景看待问题，觉得存在几处浪费工作，代码结构更加不清晰。 
+不过后来发现，其实应该“乐观”看待，`高并发初始化`场景少，`高并发取实例`场景多
+理解代码：[SigletonTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest2.java)
