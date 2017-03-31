@@ -6,6 +6,9 @@ tags:
 建立这个`Read Later`的初衷：一些好的资料没有吸收完全，用其它闲暇的时间来继续吸收，手机、其他PC都可访问。
 
 <hr>
+### 2017年3月31日13:24:12
+1. [Java的Spi机制研究](http://blog.csdn.net/Evankaka/article/details/58265019)
+
 ### 2017年3月24日09:59:55
 1. [oauth2简单原理描述](http://blog.csdn.net/yunnysunny/article/details/17482175)
 
