@@ -799,6 +799,94 @@ private static MyObject myObject = new MyObject();
 
 以上代码帮助理解"懒汉模式" + "DCL" 方式实现的单例，应对的绝大多数场景：`高并发取单例，低并发初始化实例`，巧妙的避免了`synchronized`的阻塞，又使用`synchronized`来保证单次实例化。
 
+进阶理解，对比测试：[SyncDclMethodCompare.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SyncDclMethodCompare.java)
+
+`剧情再次反转，在我的上面的测试环境，就用 synchronized 方法就好，不会有什么性能影响`
+
+### 6.3 静态内置类实现单例
+静态内部类实现 [SigletonTest3.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest3.java)
+
+### 6.4 序列化反序列化实现单例
+反序列化生成对象时，不通过对象的构造方法，所以会造成有另外的实例被生成，出现非单例的情况，但是反序列化内部会判断对象是否有`readResolve`方法，有就会自动调用，来达到单例的目的。
+
+测试类： [SigletonTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest4.java)
+
+### 6.5 使用 static 代码块实现单例
+其实这种和`饿汉模式`类似，都类被访问，静态资源自动初始化。
+
+测试类： [SigletonTest5.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest5.java)
+
+### 6.6 使用枚举 enum 数据类型实现单例
+利用枚举类中枚举元素自动实例化的特点，定义几个枚举元素，产生几个实例，定义一个枚举元素，就是单个实例。
+
+测试类： [SigletonTest6.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest6.java)
+
+### 6.7 完善使用 enum 枚举实现单例模式
+上面`6.6`的例子中违反了“职责单一原则”，完善测试类： [SigletonTest7.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest7.java)
+
+## 7. 拾遗增补
+Skills:
+* 线程组的使用
+* 如何切换线程状态
+* SimpleDateFormat 类与多线程的解决办法
+* 如何处理线程异常
+
+### 7.1 线程的状态
+线程状态枚举类：`Thread.State`
+
+#### 7.1.1 验证 NEW、RUNNABLE、TERMINATED
+#### 7.1.2 验证 TIMED_WAITING
+#### 7.1.3 验证 BLOCKED
+#### 7.1.4 验证 WAITING
+
+[演示以上1-4状态的例子](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ThreadStateTest.java)
+
+### 7.2 线程组
+可以把线程归属到某一个线程组中，线程组中可以有线程对象、也可以有线程组，组中还可以有线程。就类似于一颗节点树，树分支是线程组，叶子节点就是线程，树分支上可以有更小的树分支。
+
+线程组的作用是批量管理线程或线程组对象，有效的对线程或线程组对象进行组织。
+
+#### 7.2.1 线程对象管理线程组： 1级关联
+测试类： [GroupAddThread.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupAddThread.java)
+
+#### 7.2.2 线程对象管理线程组： 多级关联
+多级分组, 测试类：[GroupAddThreadMoreLevel.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupAddThreadMoreLevel.java)
+
+#### 7.2.3 线程组自动归属特性
+自动归属就是自动归到当前线程组中。
+测试类：[AutoAddGroup.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/AutoAddGroup.java)
+
+#### 7.2.4 获取根线程组
+通过线程`getThreadGroup().getParent()`获取线程所在组的父级线程组，得到为null时则已经是最根级别的组了。
+
+测试类：[GetParentGroup.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GetParentGroup.java)
+
+#### 7.2.5 线程组里加线程组
+利用`ThreadGroup`构造函数显示指定父线程组，测试类：[GroupAddGroup.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupAddGroup.java)
+
+#### 7.2.6 组内的线程批量停止
+测试类：[GroupInnerStop.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupInnerStop.java)
+
+#### 7.2.7 递归与非递归取的组内对象
+* `getThreadGroup().enumerate(putList, isRecurse)` 可以指定是否递归子孙组
+* `activeGroupCount()` 取的数量是包括子孙组的
+
+测试类：[GroupRecurse.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupRecurse.java)
+
+### 7.3 使线程具有有序性
+正常情况下，多个线程执行任务的时机是无序的。可通过改造代码使他们具有有序性。
+
+测试类：[ThreadRunSync.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ThreadRunSync.java)
+
+这里的顺序控制逻辑其实可以利用其它方式，如指定`nextFlag`，或者使用`ReentrantLock`的多个`Condition`来指定唤醒执行。
+
+### 7.4 SimpleDateFormat 非线程安全
+`SimpleDateFormat`主要负责日期的转换和格式化，但在多线程环境中容易误用，比如全局静态化实例、全局实例多线程访问造成转换不准确。
+
+#### 7.4.1 出现异常
+发生异常的原因：跟踪`SimpleDateFormat` 源码可以发现 内部 存储了全局变量： `Calendar`，也就是单个实例，多线程 都会访问操作 这个`Calendar`，造成混乱，最终转换错误或出现转换异常
+测试类：[FormatError.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/FormatError.java)
+
 
 #### TODO 大总结： 
 * 锁存在的意义
@@ -807,13 +895,29 @@ private static MyObject myObject = new MyObject();
 * `LOck`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
 * `Timer`类方法
 * 补充 ThreadGroup、Thread.enumerate 等方法
+* 补充 管理类：ThreadPoolExcutor 等
 
 #### TODO 想到的几个问题
 1. 类内部的`public static xxMethod() {}` 有可能被阻塞吗？
+> 静态资源初始化造成“阻塞”，但是
+
 2. `thead.join()`方法内的`wait(0)`可以用`sleep(0)`代替实现吗？
+
 3. `thread.join()` 如果`thread`内部启动了新的线程，那么`thread.join()`后的代码会等待`thread`内部线程再执行吗？
-3. 线程基础 `Object.wait()`与 `Object.notify()` 都是干什么用的，怎么用的？
-4. 怎么看待单例模式中懒汉模式结合`DCL`的方式解决线程安全问题？ 
+
+4. 线程基础 `Object.wait()`与 `Object.notify()` 都是干什么用的，怎么用的？
+
+5. 怎么看待单例模式中懒汉模式结合`DCL`的方式解决线程安全问题？ 
 > 初期理解，以高并发初次实例化的场景看待问题，觉得存在几处浪费工作，代码结构更加不清晰。 
 不过后来发现，其实应该“乐观”看待，`高并发初始化`场景少，`高并发取实例`场景多
 理解代码：[SigletonTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest2.java)
+
+6. 发生线程安全问题一般有哪几种情况？ 方法内定义的变量，可能引起线程安全问题吗？
+> 容易出现问题的一般有这几中情况：
+1. 全局的静态变量， 问题的发生点在于`全部线程都能访问这个静态变量`，少有的web下应用也常见的场景：定义一个全局静态的`map`来缓存数据  `public static HashMap<String, String> cacheMap = new HashMap<String, String>();`、定义一个全局
+2. 全局的实例变量， 问题的发生点就在于`单个实例会被多个线程访问到`，web下其实遇到的较少，一般不同的线程会建立不同的实例，但是也有单个实例被多个线程访问到的情况，比如网上看到的一个利用`i++`全局变量作为`sessionId` [链接](http://www.blogjava.net/aoxj/archive/2012/06/16/380926.html)。
+3. 方法内的"局部"变量，这种在实际中发生的较少，问题发生在：`方法内定义变量，方法内部再启动多个Thread，此时"局部"变量就成了新启动的几个线程的共享变量了`，测试类：[MethodVaribleSecurity.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/MethodVaribleSecurity.java)
+
+7. 变量到底怎样的规则存储堆、栈中？
+> 一般的说法：基础值类型存栈中，对象在堆中。 不管怎样 基础类型、对象不都是定义在class内么，整个实例化后也是对象，那岂不是都在堆中了？
+比如:`Person`类，有属性：`int age`、`String name`、`Array<Person> friends`，分析下这个类的实例时如何存储的吧。
