@@ -55,6 +55,7 @@ tags:
 
     socket.io 测试 chrome插件
     SSM electron vue 代码生成、项目架构 Spring-boot
+    fiddler 本地文件替代线上文件调试bug
 
 其他：
 
@@ -112,3 +113,5 @@ tags:
         [郑昀](http://www.cnblogs.com/zhengyun_ustc/archive/2005/05/19/zhengyun_2006_chinese_resume.html)
     数学：
         [Matrix67](http://www.matrix67.com)
+    建模：
+        语义分析 ====> 图义分析、影义分析、影评
