@@ -6,6 +6,14 @@ tags:
 建立这个`Read Later`的初衷：一些好的资料没有吸收完全，用其它闲暇的时间来继续吸收，手机、其他PC都可访问。
 
 <hr>
+### 2017年4月1日09:07:00
+1. javap 反汇编器，查看java编译器生成的字节码
+    1. [javap -c命令详解](http://blog.csdn.net/junsure2012/article/details/7099222)
+    2. [JVM字节码之整型入栈指令(iconst、bipush、sipush、ldc)](http://www.cnblogs.com/luyanliang/p/5498584.html)
+    3. [读《深入理解Java虚拟机》-类文件结构](http://www.linmuxi.com/2016/06/27/jvm-note-classfile/)
+2. [有什么相见恨晚的小知识？](https://www.zhihu.com/question/51534501)
+3. [你有什么相见恨晚的英语学习方法？](https://www.zhihu.com/question/26677313/answer/34173739)
+
 ### 2017年3月31日13:24:12
 1. [Java的Spi机制研究](http://blog.csdn.net/Evankaka/article/details/58265019)
 
