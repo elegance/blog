@@ -887,6 +887,24 @@ Skills:
 发生异常的原因：跟踪`SimpleDateFormat` 源码可以发现 内部 存储了全局变量： `Calendar`，也就是单个实例，多线程 都会访问操作 这个`Calendar`，造成混乱，最终转换错误或出现转换异常
 测试类：[FormatError.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/FormatError.java)
 
+#### 7.4.2 解决异常方法1
+#### 7.4.3 解决异常方法2
+其实都是同理，不可避免每次调用都需要新的实例。一般做法是 封装工具类，实现静态方法内部实例化`SimpleDateFormat`。或者使用现有的三方工具类。
+
+### 7.5 线程中出现异常的处理
+`Thread`实例方法：`setUncaughtExceptionHandler(UncaughtExceptionHandler eh)`，与`Thread`静态方法：`setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler eh)`
+
+测试类：[ThreadExceptionHandler.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/ThreadExceptionHandler.java)，测试中在这里发现了另外一个神奇的地方:[new Thread(existsThread)](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/NewThreadForThread.java)
+
+### 7.6 线程组内异常
+新建`MyThreadGroup` 重写其`uncaughtException(Thread t, Throwable e)`方法
+测试类：[ThreadGroupInnerException.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/ThreadGroupInnerException.java)
+
+### 7.7 线程异常处理的传递
+前面介绍涉及了3中异常处理的方式，如果将这些方式一起用上，会有什么效果呢？
+
+测试类：[ThreadExceptionMultiHandler.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/ThreadExceptionMultiHandler.java)
+
 
 #### TODO 大总结： 
 * 锁存在的意义
@@ -894,8 +912,9 @@ Skills:
 * `synchronized` ,内部锁， 锁对象， Object() 类方法：截图  wait()/wait(long)、notify()、notifyAll()
 * `LOck`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
 * `Timer`类方法
-* 补充 ThreadGroup、Thread.enumerate 等方法
+* 补充 `LockSupport` [LockSupport的park和unpark的基本使用,以及对线程中断的响应性](http://www.tuicool.com/articles/MveUNzF)、[Java中Lock和LockSupport的区别到底是什么](https://www.zhihu.com/question/26471972/answer/74773092)
 * 补充 管理类：ThreadPoolExcutor 等
+* [内存模型/高效并发](http://www.linmuxi.com/2016/06/02/jvm-note-concurrent/)
 
 #### TODO 想到的几个问题
 1. 类内部的`public static xxMethod() {}` 有可能被阻塞吗？
@@ -921,3 +940,7 @@ Skills:
 7. 变量到底怎样的规则存储堆、栈中？
 > 一般的说法：基础值类型存栈中，对象在堆中。 不管怎样 基础类型、对象不都是定义在class内么，整个实例化后也是对象，那岂不是都在堆中了？
 比如:`Person`类，有属性：`int age`、`String name`、`Array<Person> friends`，分析下这个类的实例时如何存储的吧。
+[《深入理解Java虚拟机》-Java内存区域](http://www.linmuxi.com/2016/06/13/jvm-note-javamemoryarea/)
+
+8. `Thread threaNew = new Thread(existsThread)` 中 `existsThread` 的状态 对`threadNew`有什么影响？
+> [new Thread(existsThread)](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/NewThreadForThread.java)
