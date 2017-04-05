@@ -905,9 +905,15 @@ Skills:
 
 测试类：[ThreadExceptionMultiHandler.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/ThreadExceptionMultiHandler.java)
 
+## 8. 其他
+### 8.1 1. Synchronized底层优化（偏向锁、轻量级锁、重量级锁、自旋锁）
+锁的状态总共有四种：无锁状态、偏向锁、轻量级锁和重量级锁。参考：[Java并发编程：Synchronized底层优化（偏向锁、轻量级锁）](http://www.cnblogs.com/paddix/p/5405678.html)
+* 偏向锁： 适用于`低竞争`情况，其核心的思想是，如果程序没有竞争，则取消之前已经取得锁的线程同步操作。可以理解为：当只有一个线程操作带有同步方法的Vector对象的时候，此时对Vector的操作就转变成了对ArrayList的操作。jvm参数:`-XX:+UseBiasedLocking`
+* 重量级锁：对象监视锁(monitor)实现，依赖于操作系统`Mutex Lock`实现，操作系统线程间状态切换相对耗时长，这就是`synchronized`效率低的原因。
+* 自旋锁： 空转避免线程进入`BLOCKED`，适用于`锁竞争不是很激烈，锁占用时间很短的并发线程，具有一定的积极意义`,对于竞争激烈、单线程持锁时间长的不仅仅浪费CPU，最终避免不了进入`BLOCKED`状态。在JDK1.6中，Java虚拟机提供-XX:+UseSpinning参数来开启自旋锁，使用-XX:PreBlockSpin参数来设置自旋锁等待的次数。在JDK1.7开始，自旋锁的参数被取消，虚拟机不再支持由用户配置自旋锁，自旋锁总是会执行，自旋锁次数也由虚拟机自动调整。
 
 #### TODO 大总结： 
-* 锁存在的意义
+* 锁存在的意义  [Java 并发编程：核心理论](http://www.cnblogs.com/paddix/p/5374810.html)
 * 相关类 方法一览,截图
 * `synchronized` ,内部锁， 锁对象， Object() 类方法：截图  wait()/wait(long)、notify()、notifyAll()
 * `LOck`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
@@ -918,13 +924,16 @@ Skills:
 
 #### TODO 想到的几个问题
 1. 类内部的`public static xxMethod() {}` 有可能被阻塞吗？
-> 静态资源初始化造成“阻塞”，但是
+> 静态资源初始化造成“阻塞”，但是线程其实是呈`RUNNABLE`状态的，静态资源初始化本身就是 单线程的(同步阻塞)，在类内部资源被初次访问时，触发静态初始化,初始化的顺序 是从上往下. 测试类：[SigletonTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest1.java)
 
 2. `thead.join()`方法内的`wait(0)`可以用`sleep(0)`代替实现吗？
+> 具体查看：[Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗](http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/)
 
 3. `thread.join()` 如果`thread`内部启动了新的线程，那么`thread.join()`后的代码会等待`thread`内部线程再执行吗？
+> `thread.join()`方法不会理会，`thread`新启动的线程，只会根据`thread`的`isAlive`返回来判断。可以利用线程组`ThreadGroup`来判断`thread`内部新建立的线程是否都已经运行完毕。
 
 4. 线程基础 `Object.wait()`与 `Object.notify()` 都是干什么用的，怎么用的？
+> 线程同步中用到，执行`wait/notify`时都需要已经持有该对象的监视锁，`wait()`方法使线程释放锁并进入`WAITING`状态，`notify()`方法是唤醒该锁阻塞队列中的一个线程，`notify()`方法不会释放锁，同步代码块结束后才释放锁。
 
 5. 怎么看待单例模式中懒汉模式结合`DCL`的方式解决线程安全问题？ 
 > 初期理解，以高并发初次实例化的场景看待问题，觉得存在几处浪费工作，代码结构更加不清晰。 
