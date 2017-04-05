@@ -35,3 +35,10 @@ java堆、栈、堆栈的区别？
 [Java基本类型和包装类型解析](http://www.cnblogs.com/xltcjylove/p/3584386.html)
 
 基础类型与引用类型的存储是不一样的
+
+### 有关hasCode、equals、== ，重写对象的 equals方法
+`==` 一般用于原始类型相等判断， 非原始类型即`Object`, 默认情况下是比较两个对象的地址，`equals`方法内部直接采用的`==`比较。
+
+`hashCode`是Object类的方法，返回一个离散的int型整数。集合操作中使用，提高查询速度，如HasSet、HashMap、HashTable等。
+
+[OverrideEquals.java](https://github.com/elegance/dev-demo/blob/master/java-demo/basic/OverrideEquals.java)
