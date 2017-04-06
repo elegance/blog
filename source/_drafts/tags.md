@@ -116,4 +116,9 @@ tags:
     建模：
         语义分析 ====> 图义分析、影义分析、影评
     面试题：
+        [关于 Java 面试，你应该准备这些知识点](https://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651478304&idx=1&sn=1d0d4fe3c0ab972ba32e2b0d8d246e71&chksm=bd25355f8a52bc49a8d6e4f6141a3f9270eb8c42e4a984d8953a089aecbed287c1616295333a&mpshare=1&scene=1&srcid=0406UdUJTBRIKSgaARqGPdKU#rd)
+        [简书-java-占小狼](http://www.jianshu.com/u/90ab66c248e6)
         [国内一线互联网公司内部面试题库](https://github.com/JackyAndroid/AndroidInterview-Q-A/blob/master/README-CN.md)
+        [牛客网](https://www.nowcoder.com)
+    算法、排序：
+        [图形理解](https://visualgo.net/)
