@@ -172,7 +172,7 @@ public class Run {
 
 #### 1.7.2 判断线程是否是停止状态
 我们来看下如何判断线程状态不是停止的。Thread提供了两种方法：
-1. this.interrupted: 测试当前线程是否已经中断，执行后将状态标识清除为false的功能。
+1. Thread.interrupted: 测试当前线程是否已经中断，执行后将状态标识清除为false的功能。
 2. this.isInterrupted: 测试当前线程是否已经中断，但不清除状态标志。
 
 可以参考: [interrupt、interrupted 、isInterrupted 区别](http://blog.csdn.net/z69183787/article/details/25076033)
@@ -425,9 +425,9 @@ $ jstack
 
 测试类输出结果可以看出，没有`volatile`标识的变量，`threadA`根本不理会主线程对这个变量的修改，线程会一直运行；而依赖`volatile`修饰变量运行的线程，可以得到主线程的修改，线程得以正常退出。
 
-![-server为了线程效率，从私有堆栈中取值](/images/java-thread/java-thread-memory.jpg)
+![-server为了线程效率，从私有堆栈中取值](http://wx4.sinaimg.cn/mw690/929194b4gy1fecy1qtlzuj20aq06igll.jpg)
 
-![volate强制从公共堆栈中取值](/images/java-thread/volatile-force-main-memory.jpg)
+![volate强制从公共堆栈中取值](http://wx2.sinaimg.cn/mw690/929194b4gy1fecy1qe6l5j206w056jrc.jpg)
 
 #### 2.3.1 关键字volatile与死循环--单线程死循环，下一步的停止标识设置没有机会执行
 #### 2.3.2 解决同步死循环--(多线程解决，新启线程来设置停止标识)
@@ -769,11 +769,20 @@ Skills:
     当前时间往后推3秒开始执行， 每3秒 执行一次myTask ,测试类：[TimerTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest4.java)
 
 #### 5.1.5 方法 scheduleAtFixedRate(TimerTask task, Date firstTime, long period)
-**`scheduleAtFixedRate`：如果任务的执行时间点已经过去，任务会在上次任务完成后立即执行** [基础点固定-立马] -- 具有追赶执行性
+  "单次执行任务的时间"一般小于"间隔时间`period`"，比如你`完成一次仰卧起坐的时间是2秒`，那么你就不会制定一个`每隔1秒做1个仰卧起坐`执行计划,你有可能制定一个：**每隔3秒做1个仰卧起做**执行计划，基于这个计划我们来对比下各种情况，schedule/scheduleAtFixedRate的表现：
 
-**`schedule`: 如果任务的执行时间点已经过去，任务将在上次完成的时间基础上加上周期时间执行，首次任务的时间已经过去则会立即执行**  [基础点按周期顺延] -- 按周期、不具追赶执行性
+情况1：**中途出现4秒完成一个的情况** -- 认定为意外
 
-测试类：[TimerTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest4.java)
+此时`schedule/scheduleAtFixedRate`都会认为这是一个意外，为了不让这个意外继续扩散，他们都会在这个情况出现后马上开始下一次。
+
+情况2：**昨天忘记按这个计划执行了** -- 区别在这里
+
+schedule: 按period周期，不追赶；马上开始做仰卧起做，按period周期做。
+
+scheduleAtFixedRate: 追赶执行；马上开始做仰卧起坐，做完一个紧接着做下一个，直到赶上，完成昨天的量。
+
+
+测试类：[TimerTest5.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest5.java)
 
 ## 6. 单例模式与多线程
 通过单例与多线程技术的结合，在这个过程中发现很多以前为考虑的问题，学习如何使单例模式遇到多线程时安全的。
@@ -912,12 +921,27 @@ Skills:
 * 重量级锁：对象监视锁(monitor)实现，依赖于操作系统`Mutex Lock`实现，操作系统线程间状态切换相对耗时长，这就是`synchronized`效率低的原因。
 * 自旋锁： 空转避免线程进入`BLOCKED`，适用于`锁竞争不是很激烈，锁占用时间很短的并发线程，具有一定的积极意义`,对于竞争激烈、单线程持锁时间长的不仅仅浪费CPU，最终避免不了进入`BLOCKED`状态。在JDK1.6中，Java虚拟机提供-XX:+UseSpinning参数来开启自旋锁，使用-XX:PreBlockSpin参数来设置自旋锁等待的次数。在JDK1.7开始，自旋锁的参数被取消，虚拟机不再支持由用户配置自旋锁，自旋锁总是会执行，自旋锁次数也由虚拟机自动调整。
 
-#### TODO 大总结： 
+#### 总览
 * 锁存在的意义  [Java 并发编程：核心理论](http://www.cnblogs.com/paddix/p/5374810.html)
-* 相关类 方法一览,截图
+
+* Thread类
+
+![Thread](http://wx1.sinaimg.cn/mw690/929194b4gy1fecxy9fgeuj20dm1p4793.jpg)
+
 * `synchronized` ,内部锁， 锁对象， Object() 类方法：截图  wait()/wait(long)、notify()、notifyAll()
-* `LOck`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
+
+![Object](http://wx4.sinaimg.cn/mw690/929194b4gy1fecumm3jxlj20ld09rjs1.jpg)
+
+* `Lock`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
+
+![ReentrantLock](http://wx1.sinaimg.cn/mw690/929194b4gy1fecummi8pwj20sp0i00v1.jpg)
+
+![Condition](http://wx1.sinaimg.cn/mw690/929194b4gy1fecumlrh4ij20tk0akdgn.jpg)
+
 * `Timer`类方法
+
+![Timer](http://wx1.sinaimg.cn/mw690/929194b4gy1fecvjt4roej20xd0djq5x.jpg)
+
 * 补充 `LockSupport` [LockSupport的park和unpark的基本使用,以及对线程中断的响应性](http://www.tuicool.com/articles/MveUNzF)、[Java中Lock和LockSupport的区别到底是什么](https://www.zhihu.com/question/26471972/answer/74773092)
 * 补充 管理类：ThreadPoolExcutor 等
 * [内存模型/高效并发](http://www.linmuxi.com/2016/06/02/jvm-note-concurrent/)
@@ -949,6 +973,7 @@ Skills:
 7. 变量到底怎样的规则存储堆、栈中？
 > 一般的说法：基础值类型存栈中，对象在堆中。 不管怎样 基础类型、对象不都是定义在class内么，整个实例化后也是对象，那岂不是都在堆中了？
 比如:`Person`类，有属性：`int age`、`String name`、`Array<Person> friends`，分析下这个类的实例时如何存储的吧。
+[java中数据的5种存储位置(堆与栈)](http://blog.csdn.net/ghost_programmer/article/details/40891735)
 [《深入理解Java虚拟机》-Java内存区域](http://www.linmuxi.com/2016/06/13/jvm-note-javamemoryarea/)
 
 8. `Thread threaNew = new Thread(existsThread)` 中 `existsThread` 的状态 对`threadNew`有什么影响？
