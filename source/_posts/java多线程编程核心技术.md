@@ -1,10 +1,12 @@
 ---
 title: java多线程编程核心技术
-categories:
-- java
 tags:
-- 多线程
+  - 多线程
+categories:
+  - java
+date: 2017-04-06 14:35:32
 ---
+
 多线程双刃剑：充分利用多核，复杂度提升，操作共享资源处理不好时会带来线程安全问题。
 WEB编程普遍缺乏对多线程的理解：web容器实现，屏蔽了复杂的编程细节，多线程处理，（自己实现一款简单的web容器）
 
@@ -951,7 +953,7 @@ Skills:
 > 静态资源初始化造成“阻塞”，但是线程其实是呈`RUNNABLE`状态的，静态资源初始化本身就是 单线程的(同步阻塞)，在类内部资源被初次访问时，触发静态初始化,初始化的顺序 是从上往下. 测试类：[SigletonTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest1.java)
 
 2. `thead.join()`方法内的`wait(0)`可以用`sleep(0)`代替实现吗？
-> 具体查看：[Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗](http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/)
+> 具体查看：<a  href="http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/">Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗</a>
 
 3. `thread.join()` 如果`thread`内部启动了新的线程，那么`thread.join()`后的代码会等待`thread`内部线程再执行吗？
 > `thread.join()`方法不会理会，`thread`新启动的线程，只会根据`thread`的`isAlive`返回来判断。可以利用线程组`ThreadGroup`来判断`thread`内部新建立的线程是否都已经运行完毕。
