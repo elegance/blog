@@ -948,35 +948,45 @@ Skills:
 * 补充 管理类：ThreadPoolExcutor 等
 * [内存模型/高效并发](http://www.linmuxi.com/2016/06/02/jvm-note-concurrent/)
 
-#### TODO 想到的几个问题
-1. 类内部的`public static xxMethod() {}` 有可能被阻塞吗？
-> 静态资源初始化造成“阻塞”，但是线程其实是呈`RUNNABLE`状态的，静态资源初始化本身就是 单线程的(同步阻塞)，在类内部资源被初次访问时，触发静态初始化,初始化的顺序 是从上往下. 测试类：[SigletonTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest1.java)
+#### 实验碰到的几个问题
+##### 1. 类内部的`public static xxMethod() {}` 有可能被阻塞吗？
 
-2. `thead.join()`方法内的`wait(0)`可以用`sleep(0)`代替实现吗？
-> 具体查看：<a  href="http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/">Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗</a>
+静态资源初始化造成“阻塞”，但是线程其实是呈`RUNNABLE`状态的，静态资源初始化本身就是 单线程的(同步阻塞)，在类内部资源被初次访问时，触发静态初始化,初始化的顺序 是从上往下. 测试类：[SigletonTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest1.java)
 
-3. `thread.join()` 如果`thread`内部启动了新的线程，那么`thread.join()`后的代码会等待`thread`内部线程再执行吗？
-> `thread.join()`方法不会理会，`thread`新启动的线程，只会根据`thread`的`isAlive`返回来判断。可以利用线程组`ThreadGroup`来判断`thread`内部新建立的线程是否都已经运行完毕。
+##### 2. `thead.join()`方法内的`wait(0)`可以用`sleep(0)`代替实现吗？
 
-4. 线程基础 `Object.wait()`与 `Object.notify()` 都是干什么用的，怎么用的？
-> 线程同步中用到，执行`wait/notify`时都需要已经持有该对象的监视锁，`wait()`方法使线程释放锁并进入`WAITING`状态，`notify()`方法是唤醒该锁阻塞队列中的一个线程，`notify()`方法不会释放锁，同步代码块结束后才释放锁。
+具体查看：<a  href="http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/">Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗</a>
 
-5. 怎么看待单例模式中懒汉模式结合`DCL`的方式解决线程安全问题？ 
-> 初期理解，以高并发初次实例化的场景看待问题，觉得存在几处浪费工作，代码结构更加不清晰。 
+##### 3. `thread.join()` 如果`thread`内部启动了新的线程，那么`thread.join()`后的代码会等待`thread`内部线程再执行吗？
+
+`thread.join()`方法不会理会，`thread`新启动的线程，只会根据`thread`的`isAlive`返回来判断。可以利用线程组`ThreadGroup`来判断`thread`内部新建立的线程是否都已经运行完毕。
+
+##### 4. 线程基础 `Object.wait()`与 `Object.notify()` 都是干什么用的，怎么用的？
+
+线程同步中用到，执行`wait/notify`时都需要已经持有该对象的监视锁，`wait()`方法使线程释放锁并进入`WAITING`状态，`notify()`方法是唤醒该锁阻塞队列中的一个线程，`notify()`方法不会释放锁，同步代码块结束后才释放锁。
+
+##### 5. 怎么看待单例模式中懒汉模式结合`DCL`的方式解决线程安全问题？ 
+
+初期理解，以高并发初次实例化的场景看待问题，觉得存在几处浪费工作，代码结构更加不清晰。 
+
 不过后来发现，其实应该“乐观”看待，`高并发初始化`场景少，`高并发取实例`场景多
+
 理解代码：[SigletonTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest2.java)
 
-6. 发生线程安全问题一般有哪几种情况？ 方法内定义的变量，可能引起线程安全问题吗？
-> 容易出现问题的一般有这几中情况：
+##### 6. 发生线程安全问题一般有哪几种情况？ 方法内定义的变量，可能引起线程安全问题吗？
+容易出现问题的一般有这几中情况：
+
 1. 全局的静态变量， 问题的发生点在于`全部线程都能访问这个静态变量`，少有的web下应用也常见的场景：定义一个全局静态的`map`来缓存数据  `public static HashMap<String, String> cacheMap = new HashMap<String, String>();`、定义一个全局
 2. 全局的实例变量， 问题的发生点就在于`单个实例会被多个线程访问到`，web下其实遇到的较少，一般不同的线程会建立不同的实例，但是也有单个实例被多个线程访问到的情况，比如网上看到的一个利用`i++`全局变量作为`sessionId` [链接](http://www.blogjava.net/aoxj/archive/2012/06/16/380926.html)。
 3. 方法内的"局部"变量，这种在实际中发生的较少，问题发生在：`方法内定义变量，方法内部再启动多个Thread，此时"局部"变量就成了新启动的几个线程的共享变量了`，测试类：[MethodVaribleSecurity.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/MethodVaribleSecurity.java)
 
-7. 变量到底怎样的规则存储堆、栈中？
-> 一般的说法：基础值类型存栈中，对象在堆中。 不管怎样 基础类型、对象不都是定义在class内么，整个实例化后也是对象，那岂不是都在堆中了？
+##### 7. 变量到底怎样的规则存储堆、栈中？
+
+ 一般的说法：基础值类型存栈中，对象在堆中。 不管怎样 基础类型、对象不都是定义在class内么，整个实例化后也是对象，那岂不是都在堆中了？
 比如:`Person`类，有属性：`int age`、`String name`、`Array<Person> friends`，分析下这个类的实例时如何存储的吧。
 [java中数据的5种存储位置(堆与栈)](http://blog.csdn.net/ghost_programmer/article/details/40891735)
 [《深入理解Java虚拟机》-Java内存区域](http://www.linmuxi.com/2016/06/13/jvm-note-javamemoryarea/)
 
-8. `Thread threaNew = new Thread(existsThread)` 中 `existsThread` 的状态 对`threadNew`有什么影响？
-> [new Thread(existsThread)](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/NewThreadForThread.java)
+##### 8. `Thread threaNew = new Thread(existsThread)` 中 `existsThread` 的状态 对`threadNew`有什么影响？
+
+[new Thread(existsThread)](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/NewThreadForThread.java)
