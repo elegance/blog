@@ -10,6 +10,8 @@ date: 2017-02-27 16:29:42
 
 #### 2017年4月
 ```
+elapsed     过去；消逝
+pursuit     追赶
 finery      华丽；服饰
 sneakers    运动鞋；球鞋
 trouser     裤子
