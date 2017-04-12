@@ -10,6 +10,12 @@ date: 2017-02-27 16:29:42
 
 #### 2017年4月
 ```
+brief       短暂的；简明的
+desire      渴望；希望
+innovation  改革；创新
+undergraduate 大学生；本科
+volunteer   志愿者；自愿的
+sweep       打扫；清除
 elapsed     过去；消逝
 pursuit     追赶
 finery      华丽；服饰
