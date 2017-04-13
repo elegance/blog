@@ -122,5 +122,6 @@ tags:
         [国内一线互联网公司内部面试题库](https://github.com/JackyAndroid/AndroidInterview-Q-A/blob/master/README-CN.md)
         [牛客网](https://www.nowcoder.com)
         [刷题-leetcode](https://leetcode.com/)
+        [百度-fex-team-喜欢的面试者](https://github.com/fex-team/interview-questions)
     算法、排序：
         [图形理解](https://visualgo.net/)
