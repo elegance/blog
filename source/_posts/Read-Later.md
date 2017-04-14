@@ -6,6 +6,9 @@ tags:
 建立这个`Read Later`的初衷：一些好的资料没有吸收完全，用其它闲暇的时间来继续吸收，手机、其他PC都可访问。
 
 <hr>
+### 2017年4月14日15:05:05
+1. [旧文重读-有哪些生活小习惯，慢慢地可以改变一个人的性格或者生活](http://daily.zhihu.com/story/4369215)
+
 ### 2017年4月1日09:07:00
 1. javap 反汇编器，查看java编译器生成的字节码
     1. [javap -c命令详解](http://blog.csdn.net/junsure2012/article/details/7099222)
