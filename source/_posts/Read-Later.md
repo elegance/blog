@@ -10,6 +10,7 @@ tags:
 ### 2017年4月14日15:05:05
 1. [旧文重读-有哪些生活小习惯，慢慢地可以改变一个人的性格或者生活](http://daily.zhihu.com/story/4369215)
 2. [非技术-战隼的学习探索](http://www.read.org.cn/)
+3. [知乎-每天一本书的人-经典回答](https://www.zhihu.com/people/warfalcon/answers)
 
 ### 2017年4月1日09:07:00
 1. javap 反汇编器，查看java编译器生成的字节码
