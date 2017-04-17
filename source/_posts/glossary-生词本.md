@@ -10,6 +10,9 @@ date: 2017-02-27 16:29:42
 
 #### 2017年4月
 ```
+supplementary 增补的；追加的
+multilingual 使用多语言的
+surrogate   代理；代表
 brief       短暂的；简明的
 desire      渴望；希望
 innovation  改革；创新
