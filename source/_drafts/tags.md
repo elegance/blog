@@ -125,3 +125,5 @@ tags:
         [百度-fex-team-喜欢的面试者](https://github.com/fex-team/interview-questions)
     算法、排序：
         [图形理解](https://visualgo.net/)
+    产品：
+        [当领导提了不靠谱需求](http://www.yixieshi.com/78793.html)
