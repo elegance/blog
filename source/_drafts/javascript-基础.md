@@ -14,3 +14,39 @@ tags:
 每个对象有一个隐藏属性`__proto__`，这个属性指向的其实就是创建这个对象的函数的`prototype`
 
 [JS学习 Primitive vs Object](http://hackjutsu.com/2016/11/17/JS%E5%AD%A6%E4%B9%A0%20Primitive%20vs%20Object/)
+
+### Promise
+jquery 也可以优雅 [大白话讲解Promise（三）搞懂jquery中的Promise](http://www.cnblogs.com/lvdabao/p/jquery-deferred.html)
+
+### 点运算符、new运算符、函数执行这三者之间的优先级的问题
+参考：[Javascript解惑之 new A.B() 与 new A().B() 的区别](http://blog.csdn.net/cuixiping/article/details/15037061)
+```javascript
+//这两种写法是等价的  
+var d = new A;  
+var d = new A();  
+  
+//但是下面这两种是不同的，不能混淆了：  
+var d = new A.B(); //new A.B;  
+var d = new A().B(); //new A().B;  
+```
+
+###  一个基础题目
+出自：[这道题--致敬各位10年阿里的前端开发](https://juejin.im/post/58fdb0ddda2f60005dcb4bc1)
+```javascript
+function Foo() {
+    getName = function () { alert (1); };
+    return this;
+}
+Foo.getName = function () { alert (2);};
+Foo.prototype.getName = function () { alert (3);};
+var getName = function () { alert (4);};
+function getName() { alert (5);}
+
+//请写出以下输出结果：
+Foo.getName();
+getName();
+Foo().getName();
+getName();
+new Foo.getName();
+new Foo().getName();
+```
