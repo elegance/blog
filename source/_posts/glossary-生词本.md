@@ -10,6 +10,7 @@ date: 2017-02-27 16:29:42
 
 #### 2017年4月
 ```
+triangle    三角形；三人一组
 supplementary 增补的；追加的
 multilingual 使用多语言的
 surrogate   代理；代表
