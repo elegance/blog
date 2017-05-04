@@ -30,7 +30,7 @@ var d = new A.B(); //new A.B;
 var d = new A().B(); //new A().B;  
 ```
 
-###  一个基础题目
+###  一个基础题目- 有关变量提升
 出自：[这道题--致敬各位10年阿里的前端开发](https://juejin.im/post/58fdb0ddda2f60005dcb4bc1)
 ```javascript
 function Foo() {
@@ -50,3 +50,32 @@ getName();
 new Foo.getName();
 new Foo().getName();
 ```
+
+### 构造函数的返回
+```javascript
+function Obj1() {
+    this.a = 'a';
+    this.b = 'b';
+}
+
+function Obj2() {
+    this.a = 'a';
+    this.b = 'b';
+    // return new String('c');
+    return 'c';
+}
+
+function Obj3() {
+    this.a = 'a';
+    this.b = 'b';
+    return {
+        a: 'b',
+        b: 'a'
+    };
+}
+
+console.log(new Obj1());
+console.log(new Obj2());
+console.log(new Obj3());
+```
+构造函数被`new`调用时，无`return`时则得到`this`对象，有显示`return`并且返回的是`对象`时，则得到显示返回的对象，否则将忽略显示返回值返回`this`
