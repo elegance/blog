@@ -6,6 +6,10 @@ tags:
 建立这个`Read Later`的初衷：一些好的资料没有吸收完全，用其它闲暇的时间来继续吸收，手机、其他PC都可访问。
 
 <hr>
+### 2017年5月3日10:17:04
+1. 线程池文章：
+    1. [Java 线程池框架核心代码分析](http://www.kuqin.com/shuoit/20160714/352643.html)
+    2. [ Java并发编程与技术内幕:线程池深入理解](http://blog.csdn.net/evankaka/article/details/51489322)
 
 ### 2017年4月14日15:05:05
 1. [旧文重读-有哪些生活小习惯，慢慢地可以改变一个人的性格或者生活](http://daily.zhihu.com/story/4369215)
