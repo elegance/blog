@@ -132,3 +132,21 @@ setTimeout(obj.printId, 1000);     // 3. unexpect, The id is undefined,  Window 
 再理解下**this关键字的指向实在函数调用的时候定义的**
 
 要时上面的函数都达到我们的预期，我们可以采用`bind`的方式实现。比如`var callback = obj.printId.bind(obj)`
+
+### 连续赋值运算
+参考：[写了10年Javascript未必全了解的连续赋值运算](http://www.iteye.com/topic/785445)
+```javascript
+var a = {n:1};
+a.x = a = {n:2};
+alert(a.x); // --> undefined
+
+// a.x = a = {n:2};
+// 1. 从右至左，a 先被赋值为 {n:2}
+// 2. 但是a.x 中的 a 暂时还是指向的是 {n:1}，证明：
+
+var a = {n:1};
+var b = a; //持有 a的引用，用以回查
+a.x = a = {n:2};
+alert(a.x); // --> undefined
+alert(b.x); // --> [object Object]
+```
