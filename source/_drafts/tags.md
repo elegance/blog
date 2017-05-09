@@ -55,6 +55,7 @@ tags:
 
     socket.io 测试 chrome插件
     SSM electron vue 代码生成、项目架构 Spring-boot
+    fiddler 本地文件替代线上文件调试bug
 
 其他：
 
@@ -86,7 +87,9 @@ tags:
     Linux:
         日常运维：环境、防火墙、系统配置、应用配置
 
-
+    安全：
+        cookie sessionid/http-only/xss/https/
+        防攻击 验证码、频率限制、黑白名单
 
     java 应用：
         rap : mock数据、定义接口、生成接口文档
@@ -101,8 +104,26 @@ tags:
             CDN
 
             数据库优化
+    加减速算:
+        http://www.360doc.com/content/14/0423/17/15921762_371465948.shtml
+    基础进制码表
+        十进制、十六进制、二进制
     
     简历参考：
         [郑昀](http://www.cnblogs.com/zhengyun_ustc/archive/2005/05/19/zhengyun_2006_chinese_resume.html)
     数学：
         [Matrix67](http://www.matrix67.com)
+    建模：
+        语义分析 ====> 图义分析、影义分析、影评
+    面试题：
+        [关于 Java 面试，你应该准备这些知识点](https://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651478304&idx=1&sn=1d0d4fe3c0ab972ba32e2b0d8d246e71&chksm=bd25355f8a52bc49a8d6e4f6141a3f9270eb8c42e4a984d8953a089aecbed287c1616295333a&mpshare=1&scene=1&srcid=0406UdUJTBRIKSgaARqGPdKU#rd)
+        [java-老马说编程-相关系列](http://www.cnblogs.com/swiftma/p/5631311.html)
+        [简书-java-占小狼](http://www.jianshu.com/u/90ab66c248e6)
+        [国内一线互联网公司内部面试题库](https://github.com/JackyAndroid/AndroidInterview-Q-A/blob/master/README-CN.md)
+        [牛客网](https://www.nowcoder.com)
+        [刷题-leetcode](https://leetcode.com/)
+        [百度-fex-team-喜欢的面试者](https://github.com/fex-team/interview-questions)
+    算法、排序：
+        [图形理解](https://visualgo.net/)
+    产品：
+        [当领导提了不靠谱需求](http://www.yixieshi.com/78793.html)

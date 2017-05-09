@@ -65,3 +65,10 @@ vit #标签的内容
 :set paste # 开启paste模式
 :set nopaste # 粘贴完毕关闭paste模式
 ```
+12. BOM标记相关
+```vim
+:set nobomb #去掉BOM标记
+:set bomb #加上BOM标记
+:set bomb? # 查询当前是否有BOM标记
+:%!xxd #以16进制模式打开文件，可以看到具体的大端标记或小端标记
+```

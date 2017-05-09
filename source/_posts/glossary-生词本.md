@@ -8,6 +8,26 @@ categories:
 date: 2017-02-27 16:29:42
 ---
 
+#### 2017年4月
+```
+triangle    三角形；三人一组
+supplementary 增补的；追加的
+multilingual 使用多语言的
+surrogate   代理；代表
+brief       短暂的；简明的
+desire      渴望；希望
+innovation  改革；创新
+undergraduate 大学生；本科
+volunteer   志愿者；自愿的
+sweep       打扫；清除
+elapsed     过去；消逝
+pursuit     追赶
+finery      华丽；服饰
+sneakers    运动鞋；球鞋
+trouser     裤子
+leather     皮革制品；皮的
+```
+
 #### 2017年3月
 ```
 candidate   候选；候选人

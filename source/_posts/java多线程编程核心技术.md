@@ -1,10 +1,12 @@
 ---
 title: java多线程编程核心技术
-categories:
-- java
 tags:
-- 多线程
+  - 多线程
+categories:
+  - java
+date: 2017-04-06 14:35:32
 ---
+
 多线程双刃剑：充分利用多核，复杂度提升，操作共享资源处理不好时会带来线程安全问题。
 WEB编程普遍缺乏对多线程的理解：web容器实现，屏蔽了复杂的编程细节，多线程处理，（自己实现一款简单的web容器）
 
@@ -172,7 +174,7 @@ public class Run {
 
 #### 1.7.2 判断线程是否是停止状态
 我们来看下如何判断线程状态不是停止的。Thread提供了两种方法：
-1. this.interrupted: 测试当前线程是否已经中断，执行后将状态标识清除为false的功能。
+1. Thread.interrupted: 测试当前线程是否已经中断，执行后将状态标识清除为false的功能。
 2. this.isInterrupted: 测试当前线程是否已经中断，但不清除状态标志。
 
 可以参考: [interrupt、interrupted 、isInterrupted 区别](http://blog.csdn.net/z69183787/article/details/25076033)
@@ -425,9 +427,9 @@ $ jstack
 
 测试类输出结果可以看出，没有`volatile`标识的变量，`threadA`根本不理会主线程对这个变量的修改，线程会一直运行；而依赖`volatile`修饰变量运行的线程，可以得到主线程的修改，线程得以正常退出。
 
-![-server为了线程效率，从私有堆栈中取值](/images/java-thread/java-thread-memory.jpg)
+![-server为了线程效率，从私有堆栈中取值](http://wx4.sinaimg.cn/mw690/929194b4gy1fecy1qtlzuj20aq06igll.jpg)
 
-![volate强制从公共堆栈中取值](/images/java-thread/volatile-force-main-memory.jpg)
+![volate强制从公共堆栈中取值](http://wx2.sinaimg.cn/mw690/929194b4gy1fecy1qe6l5j206w056jrc.jpg)
 
 #### 2.3.1 关键字volatile与死循环--单线程死循环，下一步的停止标识设置没有机会执行
 #### 2.3.2 解决同步死循环--(多线程解决，新启线程来设置停止标识)
@@ -567,6 +569,8 @@ T3.start();
 ```
 这样就能保证三个线程依次执行了。
 
+另外注意：**如果`T1`内部启动了新的线程，`T1.join()`方法后面的代码不会等待`T1`新启的线程**
+
 #### 3.2.3 方法join与异常
 #### 3.2.4 方法join(long)的使用
 ```java
@@ -577,10 +581,412 @@ childThread.join(1000); //执行这个方法所在的线程最多等待 1000ms�
 
 #### 3.2.5 方法 join(long) 与 sleep(long)的异同
 `join(long)`方法内部是使用`wait(long)`实现的，所以`join(long)`方法也具有释放锁的特点， 而`sleep(long)`方法不会释放锁。
+
 相同：
 1. 调用`sleep`与`join`方法来达到阻塞当前线程的目的
 
 不同：
 1. `sleep(long)`为`Thread类static`方法，`join(long)`为`Thread实例的方法`，故需要注意他们作用于的线程区别
-1. 作用于普通的非同步方法中区别就是：`sleep(long)`等待固定时间、`join(long)`最多等待这么久的时间
-2. 在同步
+2. 作用于普通的非同步方法中区别就是：`sleep(long)`等待固定时间、`join(long)`最多等待这么久的时间
+
+具体深入对比可以查看: [Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗](http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/)
+
+### 3.3 类ThreadLocal的使用
+类变量的共享可以采用`public static`形式，所有线程都使用同一个`public static`变量。 如果想要实现每个线程都有自己的共享变量呢？ `JDK`提供的类`ThreadLocal`正是为了解决这个问题的。
+
+* 局部变量：方法内，不同享，与实例和线程都无关。
+* 全局变量：类内，共享实例变量，在不同的线程、或方法间达到共享
+* 全局静态：类内，共享静态变量，不同线程间访问达到共享，`静态`与实例无关。
+
+#### 3.3.1 方法 get() 与 null
+#### 3.3.2 验证变量的隔离性
+#### 3.3.3 解决 get() 返回 null问题
+#### 3.3.4 再次验证线程变量的隔离性
+测试类：[VerifyIsolation.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/VerifyIsolation.java)
+
+### 3.4 类 InheritableThreadLocal 的使用
+使用`InheritableThreadLocal`可以在子线程取得父线程继承下来的值。
+
+#### 3.4.1 值继承
+#### 3.4.2 值继承再修改
+测试类：[InheritableThreadLocalTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/InheritableThreadLocalTest.java)
+
+## 4. Lock的使用
+Skills:
+* `ReentrantLock`类的使用
+* `ReentrantReadWriteLock`类的使用
+
+### 4.1 使用 ReentrantLock类
+在`java`多线程中，可以使用`synchronized`关键字来实现线程之间同步互斥，但在`jdk1.5`中新增了`ReentrantLock`类也能达到同样的效果，并且在扩展功能上也更加强大，比如有嗅探锁定、多路分支通知等功能，使用上比`synchronized`更加灵活。
+
+#### 4.1.1 使用 ReentrantLock类实现同步
+测试类：[ReentrantLockTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReentrantLockTest.java)
+
+#### 4.1.2 使用 ReentrantLock类实现同步: 测试2
+测试类：[ReentrantLockTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReentrantLockTest2.java)
+
+#### 4.1.3 使用Condition 实现等待/通知：错误用法与解决
+关键字 `synchronized`与`wait()`和`notify()/notifyAll()`方法结合可以实现等待/通知模式，类`ReentrantLock`实现同样的功能是借助于`Condition`对象。`Condition`是JDK5中出现的技术，使用它有更好的灵活性，比如实现多路通知的功能，也就是在一个`Lock`对象中可以创建多个`Condition`对象实例，线程对象可以注册在指定的`Condition`中，从而可以有选择性地进行线程通知，在调度线程上更加灵活。
+
+测试类：[UseConditionWaitNotifyError.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/UseConditionWaitNotifyError.java)
+
+#### 4.1.4 正确使用Condition实现等待/通知
+测试类：[UseConditionWaitNotifyOK.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/UseConditionWaitNotifyOK.java)
+
+成功的实现了等待/通知模式。
+* `Object`类中的`wait()`相当于`Condition`类中的`await()`方法， 线程进入`WAITING`状态。
+* `Object`类中的`wait(long timeout)`相当于`Condition`类中的`await(long time, TimeUnit unit)`方法， 线程进入`TIMED_WAITING`状态。
+* `Object`类中的`notify()`相当于`Condition`类中的`signal()`方法
+* `Object`类中的`notifyAll()`相当于`Condition`类中的`signalAll()`方法
+
+#### 4.1.5 使用Condition实现通知部分线程：错误用法
+测试类：[MustUseMoreConditionError.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/MustUseMoreConditionError.java)
+
+两个方法共用一个`Condition`，不能体现区别唤醒，`thread-A`、`thread-B`两个线程启动分别调用了同一个`condition`的`await()`方法，线程都进入了`WAITING`状态，最后主线程同时唤醒的是两个线程。
+
+#### 4.1.6 使用多个Condition实现通知部分线程：正确用法
+测试类：[MustUseMoreConditionOK.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/MustUseMoreConditionOK.java)
+
+此时两个方法分别使用了`conditionA`、`conditionB`，主线程调用了`conditoinA.signalAll()`达到了只唤醒`thread-A`的效果，`thread-B`继续`WAITING`
+
+#### 4.1.7 实现生产者/消费者：一对一交替打印
+测试类：[ConditionTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ConditionTest.java)
+
+#### 4.1.8 实现生产者/消费者：多对多交替打印
+测试类：[ConditionTestManyToMany.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ConditionTestManyToMany.java)
+
+类似`Object`的`notify()`方法，`signal()`方法同样也会造成假死的现象，这是因为`生产者`与`消费者`使用的是同一个`Condition`，`signal()`方法在我们期望通知`消费者`时，可能通知到的是`另一个消费者`，反之消费者发出的通知也是一样的。所以这里也采取了`signalAll()`方法发出信号一并唤醒。
+
+#### 4.1.9 公平锁与非公平锁
+公平与非公平锁：锁`Lock`分为`公平锁`和`非公平锁`, 公平锁表示线程获取锁的顺序是按照线程加锁的顺序来分配的，即先来先得的`FIFO`先进先出的顺序。 而非公平锁就是一种获取锁的抢占机制，是随机获得锁的。
+
+测试类：[FairNoFairTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/FairNoFairTest.java)
+* 公平锁 ，开始运行与得锁顺序呈有序
+* 非公平锁， 开始运行与得锁顺序基本上是乱序的
+
+#### 4.1.10 方法getHoldCount()、getQueueLength()、getWaitQueueLength()
+* `int getHoldCount()` 方法是**查询当前线程保持此锁的个数**，也就是调用 `lock()`方法的次数。测试类：[LockMethodHoldCount.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodHoldCount.java)
+* `int getQueueLength()` 方法是返回**等待获取此锁的线程估计数** 测试类：[LockMethodQueueLength.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodQueueLength.java)
+* `int getWaitQueueLength(Condition condition)` 方法是返回**等待此锁相关条件Condition的线程估计数** 测试类：[LockMethodWaitQueueLength.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodWaitQueueLength.java)
+
+这里的体现其实与之前`synchronized`内部锁达一致：锁的两个队列，getQueueLength() 取的是针对此锁 在`BLOCKED` 就绪阻塞线程，`getWaitQueueLength(Condition condition)` 则是`WAITING`睡眠等待唤醒的线程
+
+#### 4.1.11 方法 hasQueuedThread()、hasQueuedThreads() 和 hasWaiters()的测试
+* `boolean hasQueuedThread(Thread thread)` 查询指定的线程是否等待获取此锁。
+* `boolean hasQueuedThreads()` 查询是否有线程正在等待获取此锁。
+
+测试类：[LockMethodHasQueued.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodHasQueued.java)
+
+* `boolean hasWaiters(Condition condition)` 查询是否有线程正在等待此锁有关的`condition`条件,测试类：[LockMethodHasWaiters.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodHasWaiters.java)
+
+#### 4.1.12 方法 isFair()、isHeldByCurrentThread() 和 isLocked() 的测试
+* `boolean isFair()` 判断锁是不是公平锁，默认情况下`ReentrantLock`是`非公平锁`
+* `boolean isHeldByCurrentThread()` 查询当前线程是否保持此锁定。
+* `boolean isLocked()` 查询此锁是否有线程保持锁定。
+
+测试类：[LockMethodIsHeldByCurrentThread.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodIsHeldByCurrentThread.java)
+
+#### 4.1.13 方法 lockInterruptibly()、tryLock() 和 tryLock(long timeout, TiemUnit unit) 的测试
+* `void lockInterruptibly()` ：取锁，如果当前线程未被中断，则获取锁定，如果已经被终端则出现异常。测试类：[LockMethodInterruptiblyTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodInterruptiblyTest.java)
+* `boolean tryLock()` : 取锁，尝试取锁，如未取得则返回false。
+* `boolean tryLock(long timeout, TimeUnit unit)`：取锁，指定时间内如未取得锁，取锁失败返回false
+
+测试类：[LockMethodTryLock.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodTryLock.java)
+
+#### 4.1.14 方法 awaitUninterruptibly() 的使用
+测试类：[LockMethodAwaitUninterruptibly.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodAwaitUninterruptibly.java)
+
+`awaitUninterruptibly()`方法不同于`await()`，前者将不理会`interrupt()`动作，继续执行，而`await()`在线程触发`interrupt()`动作时将正常抛出异常。
+
+#### 4.1.15 方法 awaitUntil() 的使用
+测试类：[LockMethodAwaitUntil.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/LockMethodAwaitUntil.java)
+
+#### 4.1.16 使用 Condition 实现顺序执行
+测试类：[ConditionABC.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ConditionABC.java)
+
+
+### 4.2 使用 ReentrantReadWriteLock 类
+类`ReentrantLock`具有完全互斥排他的效果，即同一时间只有一个线程在执行`ReentrantLock.lock()`方法后的任务。这样虽然保证了实例变量的线程安全性，但效率确实低下的。所以`JDK`提供了一种读写锁`ReentrantReadWriteLock`类，使他可以加快运行效率，在某些不需要操作实例变量的方法中，完全可以使用读写锁`ReentrantReadWriteLock`来提升该方法的代码运行速度。
+
+读写锁表示有两个锁，一个是读操作相关的锁，也称为共享锁；另一个是写操作相关的锁，也叫排他锁。
+
+多个读锁之间不互斥，读写与写锁互斥，写锁与写锁互斥。 在没有线程进行写操作时，进行读取操作的多个线程都可以获取读锁，而写操作的线程只有在获取写锁后才能进行写操作。
+
+即多个线程可以同时进行读取操作，但是同一时刻只允许一个线程进行写操作。
+
+### 4.2.1 类 ReentrantLockReadWriteLock 的使用：读读共享
+可以看出多个线程都获得了读锁`readLock`, 测试类：[ReadWriteLockBegin1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReadWriteLockBegin1.java)
+
+### 4.2.1 类 ReentrantLockReadWriteLock 的使用：写写互斥
+同意时刻，只有一个线程获得锁，写锁阻塞等待前一个线程释放锁, 测试类：[ReadWriteLockBegin2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReadWriteLockBegin2.java)
+
+### 4.2.3 类 ReentrantLockReadWriteLock 的使用：读写互斥
+### 4.2.4 类 ReentrantLockReadWriteLock 的使用：写读互斥
+**获得读锁未释放，写锁也会被阻塞，获得写锁未释放，读锁也会被阻塞**：测试类：[ReadWriteLockBegin3.java](https://github.com/elegance/dev-demo/blob/master/java-demo/lock/reentrantLock/ReadWriteLockBegin3.java)
+
+### 4.3 Lock 本章总结 
+完全可以使用`Lock`对象将`synchronized`关键字替换掉，而且其具有的功能是`synchronized`不具有的，`Lock`是`synchronized`的进阶。
+
+
+## 5 定时器 Timer
+Skills:
+* 如何实现指定时间执行任务
+* 如何实现按指定周期执行任务
+
+### 5.1 定时器 Timer 的使用
+`JDK`中`Timer`类主要负责计划任务的功能，也就是在指定时间开始执行某一任务。`Timer`的作用是设置计划任务，但是封装任务的类是`TimerTask`抽象类，所以具体要计划执行的任务继承`TimerTask`类即可。
+
+#### 5.1.1 方法 schedule(TimeTask task, Date time)
+指定的日期的时间执行一次任务。
+
+1. 执行任务的时间晚于当前时间：在未来的某个时间点执行 --- timer内部的TimerThread 在实例化时start，默认非守护线程，意味任务完成后，即使没有其他线程，程序不会结束，如果设定为守护线程，如果任务运行之前，其他非守护都已经结束，那么有可能任务还未执行，程序就已经结束。
+2. 计划时间早于当前时间：设定的时间点是已经过去 -- 时间点是过去，则会立即执行task任务
+
+    1,2 测试类：[TimerTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest1.java)
+
+3. 一个`Timer`中多个`TimerTask` 任务及延时的测试 -- 以计划执行的时间排队成队列，前者执行完后者再执行，当前者执行时间较长时会阻塞后面队列中的任务。
+    3 测试类：[TimerMultiTask.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerMultiTask.java)
+
+
+#### 5.1.2 方法 schedule(TimerTask task, Date firstTime, long period)
+指定日期的时间后，按指定间隔周期性的执行某一任务。
+1. 计划时间晚于当前时间：在未来某个时间点开始
+2. 计划时间早于当前时间：设定的开始时间是已经过去的 -- 立即开始周期任务
+3. 任务执行时间被延迟 -- 当间隔时间小于任务单次执行所要的时间时，后面的任务都被延时堆压，会越积越多，但还是一个一个顺序执行
+
+    1,2,3 测试类：[TimerTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest2.java)
+
+4. `TimerTask`类的`cancel`方法 -- 将自身任务从`Timer`任务队列中移除，其他任务不受影响
+    测试类：[TimerTaskCancel.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTaskCancel.java)
+5. `Timer`类的`cancel`方法 -- timer中的任务全部清除，timer内部线程销毁，程序退出
+    测试类：[TimerCancel.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerCancel.java)
+6. `Timer`的`cancel()` 方法注意事项 -- 调用`cancel()` 方法不一定会停止任务，当`cancel()`方法没有竞争到内部的`queue`锁时。
+
+#### 5.1.3 方法 schedule(TimerTask task, long delay)
+以当前时间为基准，延迟指定的毫秒数执行某一任务。
+    测试类：[TimerTest3.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest3.java)
+
+#### 5.1.4 方法 schedule(TimerTask task, long delay, long period)
+以当前时间为基准，延迟指定的毫秒数开始周期性的执行某一任务。
+    当前时间往后推3秒开始执行， 每3秒 执行一次myTask ,测试类：[TimerTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest4.java)
+
+#### 5.1.5 方法 scheduleAtFixedRate(TimerTask task, Date firstTime, long period)
+  "单次执行任务的时间"一般小于"间隔时间`period`"，比如你`完成一次仰卧起坐的时间是2秒`，那么你就不会制定一个`每隔1秒做1个仰卧起坐`执行计划,你有可能制定一个：**每隔3秒做1个仰卧起做**执行计划，基于这个计划我们来对比下各种情况，schedule/scheduleAtFixedRate的表现：
+
+情况1：**中途出现4秒完成一个的情况** -- 认定为意外
+
+此时`schedule/scheduleAtFixedRate`都会认为这是一个意外，为了不让这个意外继续扩散，他们都会在这个情况出现后马上开始下一次。
+
+情况2：**昨天忘记按这个计划执行了** -- 区别在这里
+
+schedule: 按period周期，不追赶；马上开始做仰卧起做，按period周期做。
+
+scheduleAtFixedRate: 追赶执行；马上开始做仰卧起坐，做完一个紧接着做下一个，直到赶上，完成昨天的量。
+
+
+测试类：[TimerTest5.java](https://github.com/elegance/dev-demo/blob/master/java-demo/timer/TimerTest5.java)
+
+## 6. 单例模式与多线程
+通过单例与多线程技术的结合，在这个过程中发现很多以前为考虑的问题，学习如何使单例模式遇到多线程时安全的。
+
+### 6.1 立即加载/"饿汉模式"
+在使用类之前类的对象就已经创建好了，中文语境来看，就是饿的迫不及待，有着急迫切的含义。实现的一般做法是：私有化构造方法，声明类全局静态变量，并实例化
+```java
+private static MyObject myObject = new MyObject();
+```
+测试类：[SigletonTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest1.java)
+
+注意看下上面例子不单是单例相关的演示，而且包括：静态资源初始化的问题，**会有一个奇怪的现象，多线程访问类的普通静态方法，不是立马返回结果，而是线程被“阻塞了”**
+
+* 静态资源初始化本身就是 单线程的(同步阻塞)，在类内部资源被初次访问时，触发静态初始化,初始化的顺序 是从上往下.
+* 被静态初始化“阻塞”的方法，不是阻塞"BLOCKD"状态，而是 "RUNNABLE" 状态
+
+其实这里应该也是`JVM`的一个编译优化，类如果被使用到，其静态的资源也不会被初始化加载。
+
+### 6.2 延迟加载/懒汉模式
+只有在`get()`时才被创建，从语境上看是“缓慢”、“不急迫”的含义。
+
+测试类：[SigletonTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest2.java)
+
+以上代码帮助理解"懒汉模式" + "DCL" 方式实现的单例，应对的绝大多数场景：`高并发取单例，低并发初始化实例`，巧妙的避免了`synchronized`的阻塞，又使用`synchronized`来保证单次实例化。
+
+进阶理解，对比测试：[SyncDclMethodCompare.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SyncDclMethodCompare.java)
+
+`剧情再次反转，在我的上面的测试环境，就用 synchronized 方法就好，不会有什么性能影响`
+
+### 6.3 静态内置类实现单例
+静态内部类实现 [SigletonTest3.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest3.java)
+
+### 6.4 序列化反序列化实现单例
+反序列化生成对象时，不通过对象的构造方法，所以会造成有另外的实例被生成，出现非单例的情况，但是反序列化内部会判断对象是否有`readResolve`方法，有就会自动调用，来达到单例的目的。
+
+测试类： [SigletonTest4.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest4.java)
+
+### 6.5 使用 static 代码块实现单例
+其实这种和`饿汉模式`类似，都类被访问，静态资源自动初始化。
+
+测试类： [SigletonTest5.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest5.java)
+
+### 6.6 使用枚举 enum 数据类型实现单例
+利用枚举类中枚举元素自动实例化的特点，定义几个枚举元素，产生几个实例，定义一个枚举元素，就是单个实例。
+
+测试类： [SigletonTest6.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest6.java)
+
+### 6.7 完善使用 enum 枚举实现单例模式
+上面`6.6`的例子中违反了“职责单一原则”，完善测试类： [SigletonTest7.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest7.java)
+
+## 7. 拾遗增补
+Skills:
+* 线程组的使用
+* 如何切换线程状态
+* SimpleDateFormat 类与多线程的解决办法
+* 如何处理线程异常
+
+### 7.1 线程的状态
+线程状态枚举类：`Thread.State`
+
+#### 7.1.1 验证 NEW、RUNNABLE、TERMINATED
+#### 7.1.2 验证 TIMED_WAITING
+#### 7.1.3 验证 BLOCKED
+#### 7.1.4 验证 WAITING
+
+[演示以上1-4状态的例子](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ThreadStateTest.java)
+
+### 7.2 线程组
+可以把线程归属到某一个线程组中，线程组中可以有线程对象、也可以有线程组，组中还可以有线程。就类似于一颗节点树，树分支是线程组，叶子节点就是线程，树分支上可以有更小的树分支。
+
+线程组的作用是批量管理线程或线程组对象，有效的对线程或线程组对象进行组织。
+
+#### 7.2.1 线程对象管理线程组： 1级关联
+测试类： [GroupAddThread.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupAddThread.java)
+
+#### 7.2.2 线程对象管理线程组： 多级关联
+多级分组, 测试类：[GroupAddThreadMoreLevel.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupAddThreadMoreLevel.java)
+
+#### 7.2.3 线程组自动归属特性
+自动归属就是自动归到当前线程组中。
+测试类：[AutoAddGroup.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/AutoAddGroup.java)
+
+#### 7.2.4 获取根线程组
+通过线程`getThreadGroup().getParent()`获取线程所在组的父级线程组，得到为null时则已经是最根级别的组了。
+
+测试类：[GetParentGroup.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GetParentGroup.java)
+
+#### 7.2.5 线程组里加线程组
+利用`ThreadGroup`构造函数显示指定父线程组，测试类：[GroupAddGroup.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupAddGroup.java)
+
+#### 7.2.6 组内的线程批量停止
+测试类：[GroupInnerStop.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupInnerStop.java)
+
+#### 7.2.7 递归与非递归取的组内对象
+* `getThreadGroup().enumerate(putList, isRecurse)` 可以指定是否递归子孙组
+* `activeGroupCount()` 取的数量是包括子孙组的
+
+测试类：[GroupRecurse.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/group/GroupRecurse.java)
+
+### 7.3 使线程具有有序性
+正常情况下，多个线程执行任务的时机是无序的。可通过改造代码使他们具有有序性。
+
+测试类：[ThreadRunSync.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/ThreadRunSync.java)
+
+这里的顺序控制逻辑其实可以利用其它方式，如指定`nextFlag`，或者使用`ReentrantLock`的多个`Condition`来指定唤醒执行。
+
+### 7.4 SimpleDateFormat 非线程安全
+`SimpleDateFormat`主要负责日期的转换和格式化，但在多线程环境中容易误用，比如全局静态化实例、全局实例多线程访问造成转换不准确。
+
+#### 7.4.1 出现异常
+发生异常的原因：跟踪`SimpleDateFormat` 源码可以发现 内部 存储了全局变量： `Calendar`，也就是单个实例，多线程 都会访问操作 这个`Calendar`，造成混乱，最终转换错误或出现转换异常
+测试类：[FormatError.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/FormatError.java)
+
+#### 7.4.2 解决异常方法1
+#### 7.4.3 解决异常方法2
+其实都是同理，不可避免每次调用都需要新的实例。一般做法是 封装工具类，实现静态方法内部实例化`SimpleDateFormat`。或者使用现有的三方工具类。
+
+### 7.5 线程中出现异常的处理
+`Thread`实例方法：`setUncaughtExceptionHandler(UncaughtExceptionHandler eh)`，与`Thread`静态方法：`setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler eh)`
+
+测试类：[ThreadExceptionHandler.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/ThreadExceptionHandler.java)，测试中在这里发现了另外一个神奇的地方:[new Thread(existsThread)](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/NewThreadForThread.java)
+
+### 7.6 线程组内异常
+新建`MyThreadGroup` 重写其`uncaughtException(Thread t, Throwable e)`方法
+测试类：[ThreadGroupInnerException.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/ThreadGroupInnerException.java)
+
+### 7.7 线程异常处理的传递
+前面介绍涉及了3中异常处理的方式，如果将这些方式一起用上，会有什么效果呢？
+
+测试类：[ThreadExceptionMultiHandler.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/ThreadExceptionMultiHandler.java)
+
+## 8. 其他
+### 8.1 1. Synchronized底层优化（偏向锁、轻量级锁、重量级锁、自旋锁）
+锁的状态总共有四种：无锁状态、偏向锁、轻量级锁和重量级锁。参考：[Java并发编程：Synchronized底层优化（偏向锁、轻量级锁）](http://www.cnblogs.com/paddix/p/5405678.html)
+* 偏向锁： 适用于`低竞争`情况，其核心的思想是，如果程序没有竞争，则取消之前已经取得锁的线程同步操作。可以理解为：当只有一个线程操作带有同步方法的Vector对象的时候，此时对Vector的操作就转变成了对ArrayList的操作。jvm参数:`-XX:+UseBiasedLocking`
+* 重量级锁：对象监视锁(monitor)实现，依赖于操作系统`Mutex Lock`实现，操作系统线程间状态切换相对耗时长，这就是`synchronized`效率低的原因。
+* 自旋锁： 空转避免线程进入`BLOCKED`，适用于`锁竞争不是很激烈，锁占用时间很短的并发线程，具有一定的积极意义`,对于竞争激烈、单线程持锁时间长的不仅仅浪费CPU，最终避免不了进入`BLOCKED`状态。在JDK1.6中，Java虚拟机提供-XX:+UseSpinning参数来开启自旋锁，使用-XX:PreBlockSpin参数来设置自旋锁等待的次数。在JDK1.7开始，自旋锁的参数被取消，虚拟机不再支持由用户配置自旋锁，自旋锁总是会执行，自旋锁次数也由虚拟机自动调整。
+
+#### 总览
+* 锁存在的意义  [Java 并发编程：核心理论](http://www.cnblogs.com/paddix/p/5374810.html)
+
+* Thread类
+
+![Thread](http://wx1.sinaimg.cn/mw690/929194b4gy1fecxy9fgeuj20dm1p4793.jpg)
+
+* `synchronized` ,内部锁， 锁对象， Object() 类方法：截图  wait()/wait(long)、notify()、notifyAll()
+
+![Object](http://wx4.sinaimg.cn/mw690/929194b4gy1fecumm3jxlj20ld09rjs1.jpg)
+
+* `Lock`接口方法，`ReentrantLock`类方法，`ReentrantReadWriteLock`类方法 读、写锁特性
+
+![ReentrantLock](http://wx1.sinaimg.cn/mw690/929194b4gy1fecummi8pwj20sp0i00v1.jpg)
+
+![Condition](http://wx1.sinaimg.cn/mw690/929194b4gy1fecumlrh4ij20tk0akdgn.jpg)
+
+* `Timer`类方法
+
+![Timer](http://wx1.sinaimg.cn/mw690/929194b4gy1fecvjt4roej20xd0djq5x.jpg)
+
+* 补充 `LockSupport` [LockSupport的park和unpark的基本使用,以及对线程中断的响应性](http://www.tuicool.com/articles/MveUNzF)、[Java中Lock和LockSupport的区别到底是什么](https://www.zhihu.com/question/26471972/answer/74773092)
+* 补充 管理类：ThreadPoolExcutor 等
+* [内存模型/高效并发](http://www.linmuxi.com/2016/06/02/jvm-note-concurrent/)
+
+#### 实验碰到的几个问题
+##### 1. 类内部的`public static xxMethod() {}` 有可能被阻塞吗？
+
+静态资源初始化造成“阻塞”，但是线程其实是呈`RUNNABLE`状态的，静态资源初始化本身就是 单线程的(同步阻塞)，在类内部资源被初次访问时，触发静态初始化,初始化的顺序 是从上往下. 测试类：[SigletonTest1.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest1.java)
+
+##### 2. `thead.join()`方法内的`wait(0)`可以用`sleep(0)`代替实现吗？
+
+具体查看：<a  href="http://blog.ouronghui.com/2017/03/23/Thread%E7%B1%BBjoin%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%20wait(0)%20%E8%83%BD%E7%94%A8%20sleep(0)%20%E6%9D%A5%E6%9B%BF%E4%BB%A3%E6%A8%A1%E6%8B%9F%E5%90%97/">Thread类join方法中的 wait(0) 能用 sleep(0) 来替代模拟吗</a>
+
+##### 3. `thread.join()` 如果`thread`内部启动了新的线程，那么`thread.join()`后的代码会等待`thread`内部线程再执行吗？
+
+`thread.join()`方法不会理会，`thread`新启动的线程，只会根据`thread`的`isAlive`返回来判断。可以利用线程组`ThreadGroup`来判断`thread`内部新建立的线程是否都已经运行完毕。
+
+##### 4. 线程基础 `Object.wait()`与 `Object.notify()` 都是干什么用的，怎么用的？
+
+线程同步中用到，执行`wait/notify`时都需要已经持有该对象的监视锁，`wait()`方法使线程释放锁并进入`WAITING`状态，`notify()`方法是唤醒该锁阻塞队列中的一个线程，`notify()`方法不会释放锁，同步代码块结束后才释放锁。
+
+##### 5. 怎么看待单例模式中懒汉模式结合`DCL`的方式解决线程安全问题？ 
+
+初期理解，以高并发初次实例化的场景看待问题，觉得存在几处浪费工作，代码结构更加不清晰。 
+
+不过后来发现，其实应该“乐观”看待，`高并发初始化`场景少，`高并发取实例`场景多
+
+理解代码：[SigletonTest2.java](https://github.com/elegance/dev-demo/blob/master/java-demo/sigleton/SigletonTest2.java)
+
+##### 6. 发生线程安全问题一般有哪几种情况？ 方法内定义的变量，可能引起线程安全问题吗？
+容易出现问题的一般有这几中情况：
+
+1. 全局的静态变量， 问题的发生点在于`全部线程都能访问这个静态变量`，少有的web下应用也常见的场景：定义一个全局静态的`map`来缓存数据  `public static HashMap<String, String> cacheMap = new HashMap<String, String>();`、定义一个全局
+2. 全局的实例变量， 问题的发生点就在于`单个实例会被多个线程访问到`，web下其实遇到的较少，一般不同的线程会建立不同的实例，但是也有单个实例被多个线程访问到的情况，比如网上看到的一个利用`i++`全局变量作为`sessionId` [链接](http://www.blogjava.net/aoxj/archive/2012/06/16/380926.html)。
+3. 方法内的"局部"变量，这种在实际中发生的较少，问题发生在：`方法内定义变量，方法内部再启动多个Thread，此时"局部"变量就成了新启动的几个线程的共享变量了`，测试类：[MethodVaribleSecurity.java](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/MethodVaribleSecurity.java)
+
+##### 7. 变量到底怎样的规则存储堆、栈中？
+
+ 一般的说法：基础值类型存栈中，对象在堆中。 不管怎样 基础类型、对象不都是定义在class内么，整个实例化后也是对象，那岂不是都在堆中了？
+比如:`Person`类，有属性：`int age`、`String name`、`Array<Person> friends`，分析下这个类的实例时如何存储的吧。
+[java中数据的5种存储位置(堆与栈)](http://blog.csdn.net/ghost_programmer/article/details/40891735)
+[《深入理解Java虚拟机》-Java内存区域](http://www.linmuxi.com/2016/06/13/jvm-note-javamemoryarea/)
+
+##### 8. `Thread threaNew = new Thread(existsThread)` 中 `existsThread` 的状态 对`threadNew`有什么影响？
+
+[new Thread(existsThread)](https://github.com/elegance/dev-demo/blob/master/java-demo/thread/exception/NewThreadForThread.java)

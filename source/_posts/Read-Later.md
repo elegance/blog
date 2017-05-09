@@ -6,6 +6,29 @@ tags:
 建立这个`Read Later`的初衷：一些好的资料没有吸收完全，用其它闲暇的时间来继续吸收，手机、其他PC都可访问。
 
 <hr>
+### 2017年5月3日10:17:04
+1. 线程池文章：
+    1. [Java 线程池框架核心代码分析](http://www.kuqin.com/shuoit/20160714/352643.html)
+    2. [ Java并发编程与技术内幕:线程池深入理解](http://blog.csdn.net/evankaka/article/details/51489322)
+
+### 2017年4月14日15:05:05
+1. [旧文重读-有哪些生活小习惯，慢慢地可以改变一个人的性格或者生活](http://daily.zhihu.com/story/4369215)
+2. [非技术-战隼的学习探索](http://www.read.org.cn/)
+3. [知乎-每天一本书的人-经典回答](https://www.zhihu.com/people/warfalcon/answers)
+
+### 2017年4月1日09:07:00
+1. javap 反汇编器，查看java编译器生成的字节码
+    1. [javap -c命令详解](http://blog.csdn.net/junsure2012/article/details/7099222)
+    2. [JVM字节码之整型入栈指令(iconst、bipush、sipush、ldc)](http://www.cnblogs.com/luyanliang/p/5498584.html)
+    3. [读《深入理解Java虚拟机》-类文件结构](http://www.linmuxi.com/2016/06/27/jvm-note-classfile/)
+2. [有什么相见恨晚的小知识？](https://www.zhihu.com/question/51534501)
+3. [你有什么相见恨晚的英语学习方法？](https://www.zhihu.com/question/26677313/answer/34173739)
+
+### 2017年3月31日13:24:12
+1. [Java的Spi机制研究](http://blog.csdn.net/Evankaka/article/details/58265019)
+
+### 2017年3月24日09:59:55
+1. [oauth2简单原理描述](http://blog.csdn.net/yunnysunny/article/details/17482175)
 
 ### 2017年3月17日10:56:38 （java性能调优）
 1. jps、jstack等工具排查问题、微信收藏java 排查问题文章的整理
