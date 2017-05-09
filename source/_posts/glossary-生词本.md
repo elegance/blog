@@ -10,6 +10,7 @@ date: 2017-02-27 16:29:42
 
 #### 2017年3月
 ```
+candidate   候选；候选人
 snippet     片段；小片
 compete     竞争；竞赛
 peek        偷看；窥视
