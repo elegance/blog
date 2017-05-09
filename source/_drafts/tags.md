@@ -127,3 +127,5 @@ tags:
         [图形理解](https://visualgo.net/)
     产品：
         [当领导提了不靠谱需求](http://www.yixieshi.com/78793.html)
+    
+    老程序员：http://www.infoq.com/cn/news/2017/05/Forty-years-who-programming?utm_source=infoq&utm_medium=popular_widget&utm_campaign=popular_content_list&utm_content=homepage
