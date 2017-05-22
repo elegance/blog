@@ -9,6 +9,10 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年5月
 ```
+hipster     潮人；（指衣服）低到臀部的
+collaborator  协作者；合作者
+elusive     难以捉摸的；不易记住的
+sensitive   敏感的；易受影响的；
 throttle    节流；减速
 ```
 
