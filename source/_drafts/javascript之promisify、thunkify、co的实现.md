@@ -11,3 +11,9 @@ tags:
 promise => async/await 使用
 
 thunkify => co => ES6 generator 使用
+
+
+
+event loop的理解，callback => promise => generator => CSP ，Channel, Goroutines
+
+CSP => [Clojure 风格的 JavaScript 并发编程](https://blog.oyanglul.us/javascript/clojure-core.async-essence-in-native-javascript.html)
