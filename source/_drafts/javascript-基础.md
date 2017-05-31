@@ -109,6 +109,19 @@ console.log(new Obj3());
 })(Function("return this")); // 此处不用new 跟以构造函数调用是一样的
 ``` 
 
+### 理解JavaScript的原型链和继承
+[参考自此](http://gistdeck.github.io/jcouyang/03121932d18eba44088e)
+instanceof:
+```js
+object instanceof constructor
+```
+[instanceof](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof)用来判断一个对象的原型链中是否有指定的构造函数。
+
+原型：`Object.prototype`
+
+原型链：`__proto__`，如 `Object.__proto__`、`Object.prototype.__proto__`
+
+
 ### JS 的 new 到底是干什么的？-- 士兵攻击例子
 https://zhuanlan.zhihu.com/p/23987456
 
