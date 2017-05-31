@@ -9,6 +9,11 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年5月
 ```
+paradigm    范例；模范
+shortcuts   快捷键
+consensus   共识；合意
+majority    多数；成年
+vote        投票；投票表决
 hipster     潮人；（指衣服）低到臀部的
 collaborator  协作者；合作者
 elusive     难以捉摸的；不易记住的
@@ -179,6 +184,8 @@ demote      降级
 
 #### 其它
 ```
+think about         想一想；()
+aka (also known as) 又名；也称为
 CISC (Complex Instruction Set Computing)  复杂指令集；(如x86指令集)
 RISC (Reduce Instruction Set Computing)   精简指令集；
 in other words      换句话说
@@ -191,3 +198,8 @@ general purpose     一般用途；通用的
 comes with          自带；配备
 behind the scenes   幕后
 ```
+
+#### [clojure-flavored-javascript](https://oyanglul.us/clojure-flavored-javascript/)
+> Think about how we gonna implement the same thing if not using map 
+
+> Programmer need to think about nearly every step the machine can understand.
