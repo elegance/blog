@@ -73,9 +73,9 @@ deploy:
   #repo: git@github.com:elegance/blog.git
 
 # duoshuo
-duoshuo_shortname: elegance
+# duoshuo_shortname: elegance
 
 # Analytics
-cnzz_tonji:
-    enable: true
-    siteid: 1259291275
+# cnzz_tonji:
+#     enable: true
+#     siteid: 1259291275
