@@ -1,11 +1,10 @@
 ---
 title: java多线程补充-LockSupport类
-categories:
-    java
-tags:
-    多线程
-    锁
+tags: 多线程 锁
+categories: java
+date: 2017-06-21 10:32:32
 ---
+
 
 在之前的[java多线程编程核心技术](http://blog.ouronghui.com/2017/04/06/java多线程编程核心技术)文章中，主要是记录了书`《Java多线程编程核心技术》`的一些内容，其中没有介绍到`LockSupport`类，但是这个类在`jdk`源码中也经常会碰到，所以特意拿出来再看一番。
 
