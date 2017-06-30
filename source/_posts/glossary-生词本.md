@@ -11,6 +11,10 @@ date: 2017-02-27 16:29:42
 ```
 celebrate   庆祝；歌颂
 elixir      炼金药；长生不老药
+briefly     简要的；略略
+skeptics    怀疑者
+strangers   陌生人；外人
+exploration 勘探
 ```
 
 #### 2017年5月
