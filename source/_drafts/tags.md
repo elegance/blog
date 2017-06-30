@@ -48,8 +48,11 @@ tags:
             JMH基准测试
         JAVA基础：
             http://www.runoob.com/java/java-data-structures.html
-        JVM基础
+        JVM基础:
             JVM-http://blog.csdn.net/vernonzheng/article/details/8458483
+        微服务:
+            [微服务网关和管理-kong](https://getkong.org/)
+            [开源的认证、访问控制](https://www.oschina.net/translate/easily-secure-your-spring-boot-applications-with-k)
 
 工具：
 
