@@ -7,6 +7,12 @@ categories:
   - 英语
 date: 2017-02-27 16:29:42
 ---
+#### 2017年7月
+```
+principals  身份
+credentials 证书；凭证
+```
+
 #### 2017年6月
 ```
 celebrate   庆祝；歌颂
