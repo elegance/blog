@@ -9,6 +9,11 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年7月
 ```
+resigned    辞职
+painful     痛苦
+implicit    含蓄；简化
+injustice   不公平；冤屈
+witness     目睹；见证
 principals  身份
 credentials 证书；凭证
 ```
