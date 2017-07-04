@@ -1,6 +1,11 @@
 ---
 title: 再理一遍OAuth2.0
 tags:
+    - 安全
+    - 授权
+categories:
+    - WEB
+    - 安全
 ---
 OAuth在我印象中已经啃过几次了。大多数时候，好记性还是不如烂笔头，对自己的记忆力太过自信了，当时理解了，觉的妙，但是现在只记得一个妙字了，至于其它的已经忘的差不多了...
 
@@ -107,6 +112,53 @@ OAuth在我印象中已经啃过几次了。大多数时候，好记性还是不
      |         |<---(E)----- Access Token -------------------'
      +---------+       (w/ Optional Refresh Token)
 ```
+执行步骤：
+```
+1. 用户访问客户端，后者将其导向认证服务器 ----------------- 比如打开：https://passport.csdn.net/ ，点击“微博登录”，其链接导向的是：https://api.weibo.com/oauth2/authorize?client_id=2601122390&response_type=code&redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Faccount%2Flogin%3Foauth_provider%3DSinaWeiboProvider
+2. 用户选择是否给客户端授权
+3. 假设用户选择了授权，认证服务器将用户导向至客户端事先指定的“重定向URI”（redirect URI），同时在URI后会附上一个授权码-----------------比如前面的新浪：点击授权，请求api.weibo/oauth2/autorize，响应“302”（重定向），响应头中的Location=https://passport.csdn.net/account/login?oauth_provider=SinaWeiboProvider&code=fbfd1c75c3309bb653a7c0816f919f49 ，即重定向地址。
+4. 客户端根据“附带了授权码code的重定向URI”请求，即重定向的实现，客户端的后台服务器上向认证服务器申请令牌-token，这个请求-响应对于客户端与用户是不可见的
+5. 认证服务器对授权码和重定向URI确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）
+```
+看下上面的一些请求细节。
+第一步，客户端导向认证服务器的URI的参数：
+* clietn_id: 客户端ID，这个一般是三方应用向OAuth服务提供者申请得到的，签发后一般是固定不变的。
+* response_type: 授权类型，必选项，此处固定值为code。
+* redirect_uri: 表示重定向URI，可选项。
+* scope: 申请的权限范围，可选项。
+* state: 表示客户端当前状态，自定义之，认证服务器会原封不动的返回这个值。
+
+第二步，授权界面：
+* 用户如果在资源提供方还未进行过认证(登录)，那么需要用户先登录认证，会有用户名、密码等登录表单，登录通过后再是授权界面
+
+第三步，授权与否：
+* 前面的步骤的假设是，用户选择了授权，界面上有时会有“取消”按钮，当用户拒绝授权时也可以通过URI重定向通知到客户端用户的行为
+
+第四步，带授权码的URI重定向跳转，客户端的后台服务向认证服务器申请token
+* 授权码code，为了安全一般具有时效性，通常是10分钟，且使用一次后失效。该code与client_id是一一对应关系，即其他应用使用这个code是无效的，另外重定向的URI也是与之对应相对固定的。
+* 申请token的参数：（地址类似：POST //github.com/login/oauth/access_token）
+    * grant_type：表示授权模式，必选项，此处为“authorization_code” （与之相呼应的是第一步请求里的 response_type=code）
+    * code：表示上一步获得的授权码，必选项
+    * redirect_uri：表示重定向URI，必选项，与第一步请求里的redirect_uri保持一致
+    * client_id：表示客户端ID，必选项
+    * client_secret：三方应用与OAuth服务商协商所得，注意保密，不要放置到客户端。（为什么不用上面的用户授权码code直接作为access token的原因其实也就在这里）
+
+第五步，认证服务器检查token请求，响应参数如下：
+* access_token：表示访问令牌
+* token_type：表示令牌类型，可以是bearer或mac类型
+* expires_in：表示过期时间，单位为秒。如果省略该参数，必须在其他地方设置过期时间
+* refresh_token：表示更新令牌，用来获取下一次的访问令牌，可选项。
+* scope：表示授权范围，如果与客户端申请的范围一致，可省略。
+
+## 其他三种授权模式
+关于这三种模式，这里只会简单的记录下，如果需要详细了解，可以点文章末尾的链接去看阮一峰的文章。
+* 简化模式（implicit grant type）
+    * 其特点是**跳过了授权码**这个步骤，所有步骤在浏览器中完成。 ——[疑问](https://segmentfault.com/q/1010000008974042)
+* 密码模式（Resource Owner Password Credentials Grant）
+    * 用户向客户端提供用户名、密码
+    * 客户端使用用户提交的信息，提交给认证服务器申请令牌 **通常这个客户端必须是高度可信任的**，不然会有泄密的可能。
+* 客户端模式（Client Credentials Grant）
+    * 客户端使用自己的名义，而不是用户的名义，向认证服务器认证。其实整个过程不存在授权，只有一个认证，就是服务器认证客户端是可信客户端。
 
 ## 实战
 [OAuth2集成——《跟我学Shiro》](http://jinnianshilongnian.iteye.com/blog/2038646)
@@ -114,9 +166,16 @@ OAuth在我印象中已经啃过几次了。大多数时候，好记性还是不
 ## 关于安全
 从以上的实现机制，可以看出最终是为了得到`token`。其实这个`token`与平时web会话客户端的那个 `sessionid`的本质意义是一样的，都是用户的身份标识。
 为了`sessionid`的安全我们一般会做两点，后台设置的response cookie是`httpOnly`的，也就是js不可读取保证客户端安全，另外就是使用`https`保证传输通道的安全。按照这个思路我们可以类比下这个`token`该怎么在安全方面有所保障。
+* 尽量保证token 不能被三方代码访问
+* 请求token IP的白名单
+
+安全问题，需要好好权衡，“三道安全门”你自己进门都会很困难，“一道安全门”足已，重要的是你要保护好自己的钥匙，插在门上不拔，再多安全门也没用。
+
+## 总结
+细节总难被记住，单个的web项目的身份认证只需要一个登录请求即可，而OAuth2.0涉及的是三方，会有两次请求，记忆的转弯点在这里，所以我的总结就是**请求授权码，请求token**。
 
 ---
 ## 参考
-* [简述 OAuth 2.0 的运作流程](http://www.barretlee.com/blog/2016/01/10/oauth2-introduce/)
-* [Oauth的access token 安全么?](https://www.zhihu.com/question/20274730)
-* [理解OAuth 2.0](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
+* [小胡子哥——简述 OAuth 2.0 的运作流程](http://www.barretlee.com/blog/2016/01/10/oauth2-introduce/)
+* [知乎——Oauth的access token 安全么?](https://www.zhihu.com/question/20274730)
+* [阮一峰——理解OAuth 2.0](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
