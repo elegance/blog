@@ -179,3 +179,4 @@ OAuth在我印象中已经啃过几次了。大多数时候，好记性还是不
 * [小胡子哥——简述 OAuth 2.0 的运作流程](http://www.barretlee.com/blog/2016/01/10/oauth2-introduce/)
 * [知乎——Oauth的access token 安全么?](https://www.zhihu.com/question/20274730)
 * [阮一峰——理解OAuth 2.0](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
+* [小米-振超——指间生活——token类型、协议等](http://www.zhenchao.org/categories/protocol/)
