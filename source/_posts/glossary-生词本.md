@@ -9,6 +9,7 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年7月
 ```
+idempotent  幂等
 resigned    辞职
 painful     痛苦
 implicit    含蓄；简化
