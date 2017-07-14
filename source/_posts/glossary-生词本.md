@@ -9,6 +9,7 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年7月
 ```
+proving     证明
 idempotent  幂等
 resigned    辞职
 painful     痛苦
