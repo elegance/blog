@@ -9,6 +9,11 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年7月
 ```
+genuine     真正的
+avoid       避免；避开
+slight      轻微；略
+aboundant   丰富
+corresponds 对应
 proving     证明
 idempotent  幂等
 resigned    辞职
