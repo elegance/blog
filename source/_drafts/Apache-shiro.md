@@ -30,3 +30,16 @@ SecurityManager 接口继承了 Authenticator，另外还有一个ModularRealmAu
 * FirstSuccessfulStrategy 只要有一个Realm 验证成功即可，只返回第一个Realm身份验证成功的认证信息，其他忽略。
 * AtLeastOneSuccessfulStrategy 只要有一个Realm验证成功即可，和FirstSuccess不同，返回所有Realm身份验证成功的验证信息。
 * AllSuccessfulStrategy 所有Realm验证成功才是成功，且返回所有成功的认证信息。
+
+## 授权
+授权，也叫访问控制，即应用控制中谁能访问哪些资源。授权中涉及的几个关键对象：主体（Subject）、资源（Resource）、权限（Permission）、角色（Role）
+
+资源：应用中可以访问的任何东西，如jsp、查看、编辑某些收据。
+
+权限：安全策略中的原子授权单位，通过权限可以表示用户有没有操作某个资源的权利。
+
+角色：角色代表了操作集合，可以理解为权限的集合，一般情况下我们授予用户角色而不是权限。
+
+隐式角色：即直接通过角色来验证用户有没有操作权限，关心的是角色与资源，通常是硬编码，改动成本相对较大。
+
+显示角色：在程序中通过权限控制谁能访问某个资源，关心的是细粒度的权限与资源，调整角色权限时，只需要从角色权限集合中移除/新增即可。
