@@ -9,6 +9,7 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年7月
 ```
+simulate    模拟
 genuine     真正的
 avoid       避免；避开
 slight      轻微；略
