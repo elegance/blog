@@ -213,6 +213,7 @@ demote      降级
 
 #### 其它
 ```
+for demonstration purpose 为了演示(示范)的目的
 think about         想一想；()
 aka (also known as) 又名；也称为
 CISC (Complex Instruction Set Computing)  复杂指令集；(如x86指令集)
