@@ -16,6 +16,8 @@ msgList
 ```
 
 #### Lambda 应用
+[java lambda方法引用总结——烧脑吃透](https://my.oschina.net/polly/blog/917214)
+
 1. 接口实现
 ```java
     new Thread(() -> System.out.print("Hello")).start();
