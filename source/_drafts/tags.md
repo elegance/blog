@@ -149,3 +149,4 @@ tags:
                 领导：做（考虑）对方所想的，沟通对方所想的，解释没有想而没做的。
         经历的几个问题：技术观点的冲突-几个渐进的例子(其他方面比较随意)、面对问题（猜来，急于回答，猜结论）
         有意思的几个东西：rx、raft选举、字符编码unicode的几种实现、nodejs初探、oauth/token/session/jwt、https原理
+        [并发编程网-java](http://ifeve.com/java-copy-on-write/)
