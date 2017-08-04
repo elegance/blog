@@ -7,6 +7,9 @@ tags:
 
 <hr>
 
+### 2017年8月4日09:03:44
+1. [java Bean Validation](http://ifeve.com/use-bean-validation/)
+
 ### 2017年7月5日13:51:38
 1. [幂等性的应用](http://www.cnblogs.com/weidagang2046/archive/2011/06/04/2063696.html)
 
