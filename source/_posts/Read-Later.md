@@ -7,6 +7,9 @@ tags:
 
 <hr>
 
+### 2017年7月5日13:51:38
+1. [幂等性的应用](http://www.cnblogs.com/weidagang2046/archive/2011/06/04/2063696.html)
+
 ### 2017年5月23日15:30:51
 1. [js之 函数式编程、柯里化、组合等](https://blog.oyanglul.us/javascript/functional-javascript.html#sec-2-2)
 2. [react、flux-看我们3天 hackday 都干了些什么](https://blog.oyanglul.us/javascript/react-transdux-the-clojure-approach-of-flux.html)
