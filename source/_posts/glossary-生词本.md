@@ -9,6 +9,7 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年8月
 ```
+conventionality 惯例；习俗
 barrier     屏障
 etcetera    等等;etc
 ```
