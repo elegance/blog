@@ -7,6 +7,12 @@ categories:
   - 英语
 date: 2017-02-27 16:29:42
 ---
+#### 2017年9月
+```
+earnings    收益
+emerged     出现
+```
+
 #### 2017年8月
 ```
 conventionality 惯例；习俗
