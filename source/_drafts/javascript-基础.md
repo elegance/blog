@@ -128,4 +128,10 @@ https://zhuanlan.zhihu.com/p/23987456
 ### this 的值到底是什么？一次说清楚
 https://zhuanlan.zhihu.com/p/23804247
 
+### Proxy对象的作用
+* 代理数据对象
+* 监控数据对象的访问，比如数据去空格、统计读取次数等
+* 双向绑定
+https://zhuanlan.zhihu.com/p/22584733 5分钟
+
 ### 前端基础功：https://zhuanlan.zhihu.com/study-fe
