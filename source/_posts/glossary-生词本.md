@@ -9,6 +9,7 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年9月
 ```
+arrange     安排
 threats     威胁
 earnings    收益
 emerged     出现
