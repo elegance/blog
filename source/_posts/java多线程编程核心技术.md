@@ -6,8 +6,12 @@ categories:
   - java
 date: 2017-04-06 14:35:32
 ---
+如果你认为多线程编程就是一堆的线程在运行一堆的代码，那将会一团糟。程序有时候正常，偶尔又异常，多线程的编程将变的困难。
+
+但是如果你能将线程按需来分配，控制线程间的交互，那问题就变得简单多了。
 
 多线程双刃剑：充分利用多核，复杂度提升，操作共享资源处理不好时会带来线程安全问题。
+
 WEB编程普遍缺乏对多线程的理解：web容器实现，屏蔽了复杂的编程细节，多线程处理，（自己实现一款简单的web容器）
 
 ## 一、Java多线程技能
@@ -448,7 +452,7 @@ $ jstack
 主要提供了：`AtomicInteger`、`AtomicBoolean`、`AtomicLong`供基础数据类型的操作，`AtomicReference<V>`对象数据操作，`AtomicStampedRefrence<V>`来操作对象并解决`ABA`的问题
 
 `AtomicInteger`完成i++, 测试类：[AtomicIntegerTest.java](https://github.com/elegance/dev-demo/blob/master/java-demo/src/main/java/org/orh/thread/AtomicIntegerTest.java)
-`AtomicReference<V>`模拟栈，测试类：[AtomicStack.java](https://github.com/elegance/dev-demo/blob/master/java-demo/src/main/java/org/orh/lock/statc-atomicVsSync/AtomicStack.java)
+`AtomicReference<V>`模拟栈，测试类：[AtomicStack.java](https://github.com/elegance/dev-demo/blob/master/java-demo/src/main/java/org/orh/lock/stackAtomVsSync/AtomicStack.java)
 `AtomicStampedRefrence<V>`解决ABA问题，测试类：[ABA.java](https://github.com/elegance/dev-demo/blob/master/java-demo/src/main/java/org/orh/lock/CAS/ABA.java)
 
 #### 2.3.6 原子类也并不完全安全
