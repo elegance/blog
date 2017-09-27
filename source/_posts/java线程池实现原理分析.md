@@ -43,7 +43,7 @@ public class ExecutorCase {
 }
 ```
 
-#### ThreadExecutorPool
+#### ThreadPoolExecutor
 `Executors`是java线程池的工厂类，通过它可以快速初始化一个符合业务需求的线程池，如`Executors.newFixedThreadPool`方法产生一个拥有固定数量的线程池。
 ```java
     public static ExecutorService newFixedThreadPool(int nThreads) {
