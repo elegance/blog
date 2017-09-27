@@ -9,6 +9,11 @@ date: 2017-02-27 16:29:42
 ---
 #### 2017年9月
 ```
+biased      有偏见的；有偏的
+coarsening  粗化；（使）变粗糙
+elimination 消除；淘汰
+adaptive    适应的；有适应能力的
+spinning    使...旋转；纺纱
 arrange     安排
 threats     威胁
 earnings    收益
