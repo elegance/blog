@@ -33,6 +33,40 @@ msgList
     Stream.of(str).map(String::new).peek(System.out::println).findFirst();
 ```
 
+3. Function传递
+```java
+    // 1. 静态方法调用
+    Function<A, String> func1 = Test::f1;   // 静态方法
+    String result1 = func1.apply(a); 
+
+    // 2. 实例方法调用
+    Test test = new Test();  
+    Function<B, String> func2 = test::f2;  
+    String result2 = func2.apply(b);  
+
+    // 3. 定义function apply的方法
+    private <T> String f(Function<T, String> func, T value) {
+        return func.apply(value);
+    }
+    String result3 = f(func1, a);
+    String result4 = f(func2, a);
+
+    // 4. 无返回值 Method 到 Function的调用
+    public static void f3(Object c) {
+        System.out.println(c);
+    }
+    Consumer<Object> c = Test::f3;
+    f3.accept("go");
+```
+
+4. `java.util.function` 包含了常用的函数式接口：
+* `Predicate<T>`：接收 `T` 对象，返回 `boolean`
+* `Consumer<T>`：接收 `T` 对象，不返回值
+* `Function<T, R>`：接收 `T` 对象，返回 `R` 对象
+* `Supplier<T>`：接收 `T` 对象（例如工厂），不接收值
+* `UnaryOperation<T>`：接收 `T` 对象，返回 `T`对象
+* `BinaryOperation<T>`：接收两个 `T` 对象，返回 `T` 对象
+
 #### java.time: LocalDate、LocalTime、LocalDateTime、Period、Duration、Instant
 ```
     Date date = DateUtils.parseDate("2017-4-10 16:19:54", "yyyy-MM-dd HH:mm:ss");
