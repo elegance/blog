@@ -34,3 +34,7 @@ resize() ==> 两倍增长，transfer， rehash 准确来讲是 reindex 根据 �
 1.8 新，当链表长度大于8时，转换为红黑树，O(N) => O(logN)
 
 ConcurrentHashMap: Segment extends ReentrantLock ，分段锁
+
+整理了一张理解图：
+
+![hashMap原理](http://photo.weibo.com/2459014324/photos/large/photo_id/4165962306853301/album_id/4093513255013452)
