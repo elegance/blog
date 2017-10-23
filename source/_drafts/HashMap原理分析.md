@@ -37,4 +37,4 @@ ConcurrentHashMap: Segment extends ReentrantLock ，分段锁
 
 整理了一张理解图：
 
-![hashMap原理](http://photo.weibo.com/2459014324/photos/large/photo_id/4165962306853301/album_id/4093513255013452)
+![hashMap原理](http://wx1.sinaimg.cn/large/929194b4gy1fkrz9urmloj21in0i0myt.jpg)
