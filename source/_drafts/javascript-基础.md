@@ -15,6 +15,9 @@ tags:
 
 [JS学习 Primitive vs Object](http://hackjutsu.com/2016/11/17/JS%E5%AD%A6%E4%B9%A0%20Primitive%20vs%20Object/)
 
+### 闭包
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/A_re-introduction_to_JavaScript#闭包
+
 ### Promise
 jquery 也可以优雅 [大白话讲解Promise（三）搞懂jquery中的Promise](http://www.cnblogs.com/lvdabao/p/jquery-deferred.html)
 
@@ -79,3 +82,56 @@ console.log(new Obj2());
 console.log(new Obj3());
 ```
 构造函数被`new`调用时，无`return`时则得到`this`对象，有显示`return`并且返回的是`对象`时，则得到显示返回的对象，否则将忽略显示返回值返回`this`
+
+### 构造块作用域-函数自执行的几种写法
+```javascript
+// 第一个括号用来包裹函数，第二个括号来触发执行(没有前面的括号，函数后面直接加括号触发执行会有语法错误)
+(function() {
+    //alert('xxx');
+})();
+
+// 这种代码被压与其它代码压缩合，如果其他人的语句最后没有以分号“；”结尾会发生错误，于是又了以下这种优化：
+;(function() { // 这个分号相当于是为前面别人的文件末尾加上一个分号“;”
+    //alert('xxx');
+})();
+
+// 再后来有人觉得第一层括号可以用单个操作符（+-!~等）来代替可以节省一个字符的空间，于是就有了：
+;!function() {
+    //alert('xxx');
+}();
+```
+
+### Function 写法 - https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function
+```javascript
+// new Function ([arg1[, arg2[, ...argN]],] functionBody)
+(function() {
+
+})(Function("return this")); // 此处不用new 跟以构造函数调用是一样的
+``` 
+
+### 理解JavaScript的原型链和继承
+[参考自此](http://gistdeck.github.io/jcouyang/03121932d18eba44088e)
+instanceof:
+```js
+object instanceof constructor
+```
+[instanceof](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof)用来判断一个对象的原型链中是否有指定的构造函数。
+
+原型：`Object.prototype`
+
+原型链：`__proto__`，如 `Object.__proto__`、`Object.prototype.__proto__`
+
+
+### JS 的 new 到底是干什么的？-- 士兵攻击例子
+https://zhuanlan.zhihu.com/p/23987456
+
+### this 的值到底是什么？一次说清楚
+https://zhuanlan.zhihu.com/p/23804247
+
+### Proxy对象的作用
+* 代理数据对象
+* 监控数据对象的访问，比如数据去空格、统计读取次数等
+* 双向绑定
+https://zhuanlan.zhihu.com/p/22584733 5分钟
+
+### 前端基础功：https://zhuanlan.zhihu.com/study-fe

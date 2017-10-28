@@ -7,6 +7,73 @@ categories:
   - 英语
 date: 2017-02-27 16:29:42
 ---
+#### 2017年10月
+```
+determine   确定；判断
+```
+
+#### 2017年9月
+```
+biased      有偏见的；有偏的
+coarsening  粗化；（使）变粗糙
+elimination 消除；淘汰
+adaptive    适应的；有适应能力的
+spinning    使...旋转；纺纱
+arrange     安排
+threats     威胁
+earnings    收益
+emerged     出现
+```
+
+#### 2017年8月
+```
+conventionality 惯例；习俗
+barrier     屏障
+etcetera    等等;etc
+```
+
+#### 2017年7月
+```
+simulate    模拟
+genuine     真正的
+avoid       避免；避开
+slight      轻微；略
+aboundant   丰富
+corresponds 对应
+proving     证明
+idempotent  幂等
+resigned    辞职
+painful     痛苦
+implicit    含蓄；简化
+injustice   不公平；冤屈
+witness     目睹；见证
+principals  身份
+credentials 证书；凭证
+```
+
+#### 2017年6月
+```
+celebrate   庆祝；歌颂
+elixir      炼金药；长生不老药
+briefly     简要的；略略
+skeptics    怀疑者
+strangers   陌生人；外人
+exploration 勘探
+```
+
+#### 2017年5月
+```
+paradigm    范例；模范
+shortcuts   快捷键
+consensus   共识；合意
+majority    多数；成年
+vote        投票；投票表决
+hipster     潮人；（指衣服）低到臀部的
+collaborator  协作者；合作者
+elusive     难以捉摸的；不易记住的
+sensitive   敏感的；易受影响的；
+throttle    节流；减速
+```
 
 #### 2017年4月
 ```
@@ -172,6 +239,9 @@ demote      降级
 
 #### 其它
 ```
+for demonstration purpose 为了演示(示范)的目的
+think about         想一想；()
+aka (also known as) 又名；也称为
 CISC (Complex Instruction Set Computing)  复杂指令集；(如x86指令集)
 RISC (Reduce Instruction Set Computing)   精简指令集；
 in other words      换句话说
@@ -184,3 +254,8 @@ general purpose     一般用途；通用的
 comes with          自带；配备
 behind the scenes   幕后
 ```
+
+#### [clojure-flavored-javascript](https://oyanglul.us/clojure-flavored-javascript/)
+> Think about how we gonna implement the same thing if not using map 
+
+> Programmer need to think about nearly every step the machine can understand.

@@ -6,6 +6,18 @@ tags:
 建立这个`Read Later`的初衷：一些好的资料没有吸收完全，用其它闲暇的时间来继续吸收，手机、其他PC都可访问。
 
 <hr>
+
+### 2017年8月4日09:03:44
+1. [java Bean Validation](http://ifeve.com/use-bean-validation/)
+
+### 2017年7月5日13:51:38
+1. [幂等性的应用](http://www.cnblogs.com/weidagang2046/archive/2011/06/04/2063696.html)
+
+### 2017年5月23日15:30:51
+1. [js之 函数式编程、柯里化、组合等](https://blog.oyanglul.us/javascript/functional-javascript.html#sec-2-2)
+2. [react、flux-看我们3天 hackday 都干了些什么](https://blog.oyanglul.us/javascript/react-transdux-the-clojure-approach-of-flux.html)
+3. [看漫画，学 Redux](https://github.com/jasonslyvia/a-cartoon-intro-to-redux-cn)
+
 ### 2017年5月3日10:17:04
 1. 线程池文章：
     1. [Java 线程池框架核心代码分析](http://www.kuqin.com/shuoit/20160714/352643.html)

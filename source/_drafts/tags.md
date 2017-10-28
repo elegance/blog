@@ -48,8 +48,11 @@ tags:
             JMH基准测试
         JAVA基础：
             http://www.runoob.com/java/java-data-structures.html
-        JVM基础
+        JVM基础:
             JVM-http://blog.csdn.net/vernonzheng/article/details/8458483
+        微服务:
+            [微服务网关和管理-kong](https://getkong.org/)
+            [开源的认证、访问控制](https://www.oschina.net/translate/easily-secure-your-spring-boot-applications-with-k)
 
 工具：
 
@@ -111,6 +114,7 @@ tags:
     
     简历参考：
         [郑昀](http://www.cnblogs.com/zhengyun_ustc/archive/2005/05/19/zhengyun_2006_chinese_resume.html)
+        [52itstyle-关于小柒(java/spring)](https://blog.52itstyle.com/about.html)
     数学：
         [Matrix67](http://www.matrix67.com)
     建模：
@@ -127,3 +131,23 @@ tags:
         [图形理解](https://visualgo.net/)
     产品：
         [当领导提了不靠谱需求](http://www.yixieshi.com/78793.html)
+    
+    老程序员：http://www.infoq.com/cn/news/2017/05/Forty-years-who-programming?utm_source=infoq&utm_medium=popular_widget&utm_campaign=popular_content_list&utm_content=homepage
+
+    面试：
+        自己的“套路”
+        态度，礼貌，方式，方法，三观之正，非精神病，可雕刻，思想品质广义上的好人
+        状态：不负责任的人易使他人愤怒，初心，负责、敬畏之心，更加努力，奋发向前，学习
+        稳定：以往经验，以及过往苦之体会
+        优缺：还是一个在路上的人，如果你需要一个相对“牛”的结果人，那可能会有些欠缺。优势是：“在奔跑”，行万里，读万卷，虚实结合。不自信，在逐渐找回自信的人。
+        经历：
+            教育，相对特例，不一样的经历，得到不同的储备，带来不一样的思考
+            工作，有同理，深入的理解到“民间疾苦”，技术之苦（技术的迫切感-技面），收入之苦（满足感-人事）
+            原则：
+                时间摆在那里，你的经历有你的丰富性，别人的经历有别人的深度性，不能用你的丰富与别人的单一比，而不必深度。广和深要一定程度结合，综合起来的表现是一种错种复杂的现象
+                深度聊到一定程度，聊广度，广度往往有利于对比、易理解，促进进步。
+                领导：做（考虑）对方所想的，沟通对方所想的，解释没有想而没做的。
+        经历的几个问题：技术观点的冲突-几个渐进的例子(其他方面比较随意)、面对问题（猜来，急于回答，猜结论）
+        有意思的几个东西：rx、raft选举、字符编码unicode的几种实现、nodejs初探、oauth/token/session/jwt、https原理
+        [并发编程网-java](http://ifeve.com/java-copy-on-write/)
+        [程序员价值最大化 - 如何在面试中脱颖而出](https://segmentfault.com/l/1500000010412101?page=2#score)
