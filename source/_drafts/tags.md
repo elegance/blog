@@ -151,3 +151,4 @@ tags:
         有意思的几个东西：rx、raft选举、字符编码unicode的几种实现、nodejs初探、oauth/token/session/jwt、https原理
         [并发编程网-java](http://ifeve.com/java-copy-on-write/)
         [程序员价值最大化 - 如何在面试中脱颖而出](https://segmentfault.com/l/1500000010412101?page=2#score)
+        [参考经历与收获-黄勇](http://blog.csdn.net/lifuxiangcaohui/article/details/48342315)
