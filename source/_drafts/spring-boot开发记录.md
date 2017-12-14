@@ -14,3 +14,4 @@ tags:
     * 新增 `XXAppProperties.java`，使用`@ConfigurationProperties(prefix = "tzb.sms")`，加入你要设定的属性（如果系统配置较多，最好分类，即此对象中包括子的properties配置）
     * 新增 `XXAppConfiguaration.java`，使用 `@Configuaration`与`@EnableConfigurationProperties(XXAppProperties.class)`
     * 完成以上就可以使用了：配置文件`application.[properties|yaml]`中使用`tzb.sms`配置，类中使用Autowire注入即可
+* 个别属性，不想使用对象，可以使用 `@Autowired ApplicationContext ctx`，然后使用`ctx.getEnviroment().getProperty("tzb.password")`
