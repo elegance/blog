@@ -11,6 +11,9 @@ tags:
 1. `XXXproperties could not autowire ` 配置类无法autowire的问题？ (Idea 会在运行前智能的提示出来有错误)
 这是因为`@SpringBootApplication`默认是扫描当前类所在包路径的，右边情况就是你的配置类`XXConfiguaratoin`不再扫描的包路径下，使用`@ComponentScan(basePackages = "com.xx")`包含其路径/或者指定多个扫描路径即可
 
+2. `@Component`(@Configuration、@Service...)结合`@Autowired List<?>`自动注入，`List<?>`中的Bean顺序问题。
+如`spring soical`中`org.springframework.social.config.annotation.SocialConfiguration#usersConnectionRepository`中使用`org.springframework.social.config.annotation.SocialConfiguration#socialConfigurers`其中顺序会对产生的`UsersConnectionRepository`有影响。
+
 #### 常见解决方式
 
 ###### 1. 项目中有一些类需外部配置
