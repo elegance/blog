@@ -14,6 +14,15 @@ tags:
 2. `@Component`(@Configuration、@Service...)结合`@Autowired List<?>`自动注入，`List<?>`中的Bean顺序问题。
 如`spring soical`中`org.springframework.social.config.annotation.SocialConfiguration#usersConnectionRepository`中使用`org.springframework.social.config.annotation.SocialConfiguration#socialConfigurers`其中顺序会对产生的`UsersConnectionRepository`有影响。
 
+3. `error creating bean with name 'scopedTarget.connectionRepository' definedi ...cglib.core.CodeGenerationException` CGLIB 代理子类的错误。
+这个错误发生在我使用`spring-social` 中，由于`JdbcConnectionRepository`为`class JdbcConnectionRepository`而不是`public class ..`导致的，有以下两种解决办法：
+    1. copy the JdbcConnectionRepository and JdbcUsersConnectionRepository and make JdbcConnectionRepository public.
+    2. add these property settings:
+    ```properties
+    spring.aop.proxy-target-class=false
+    ```
+    参考：https://github.com/spring-projects/spring-social/issues/232，这个问题在spring social新的版本中已经修正，就是将class 改为public.
+
 #### 常见解决方式
 
 ###### 1. 项目中有一些类需外部配置
