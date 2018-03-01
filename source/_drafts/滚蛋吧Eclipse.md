@@ -28,7 +28,7 @@ tags:
 | 执行到选中语句                                  |                                          |                             `Alt` + `F8` |
 | 变量重命名                                    |          `Alt` + `Shift` + `R`           |                           `Shift` + `F6` |
 | 查看实现                                     |               `Ctrl` + `T`               |                     `Ctrl` + `Alt` + `B` |
-| 查看方法在哪里被使用                               |           `Ctrl` + `Alt` + `H`           |                             `Ctrl` + `B` |
+| 查看方法在哪里被使用                               |           `Ctrl` + `Alt` + `H`           |                  `Alt`+`F7`/`Ctrl` + `B` |
 | 代码Back/Forward                           |           `Alt` + `Left/Right`           |            `Ctrl` + `Alt` + `Left/Right` |
 | 代码包裹/Surround With                       |                                          |                     `Ctrl` + `Alt` + `T` |
 | 格式化代码                                    |          `Ctrl` + `Shift` + `F`          |                     `Ctrl` + `Alt` + `L` |
